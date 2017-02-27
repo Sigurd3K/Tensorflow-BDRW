@@ -66,6 +66,9 @@ with tf.Session() as sess:
 
 	tf.global_variables_initializer().run()
 
+	writer = tf.summary.FileWriter("./logs")
+	writer.add_graph(sess.graph)
+
 	coord = tf.train.Coordinator()
 	threads = tf.train.start_queue_runners(coord=coord)
 
