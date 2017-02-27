@@ -66,6 +66,7 @@ with tf.Session() as sess:
 
 	tf.global_variables_initializer().run()
 
+	# Informatie voorzien voor TensorBoard
 	writer = tf.summary.FileWriter("./logs")
 	writer.add_graph(sess.graph)
 
