@@ -21,12 +21,14 @@ print("== fileReader.py ==")
 FILEDIR = './data/BDRW_train'
 TRAINING_DIR= FILEDIR + '/BDRW_train_1/'
 VALIDATION_DIR = FILEDIR + '/BDRW_train_2/'
-LABEL_FILE = 'filedir'
+LABEL_FILE = FILEDIR+ '/BDRW_train_2/labels.csv'
 EPOCH_LIMIT = 50
 FILES_VALIDATION = 0
 BATCH_SIZE = 50
 NUM_PREPROCESS_THREADS = 1
 MIN_QUEUE_EXAMPLES= 256
+
+# print(LABEL_FILE)
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
