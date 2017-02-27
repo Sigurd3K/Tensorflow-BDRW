@@ -48,14 +48,16 @@ image_reader = tf.WholeFileReader()
 _, image_file = image_reader.read(FILES_TRAINING)
 
 image_orig = tf.image.decode_jpeg(image_file)
-image = tf.image.resize_images(image_orig, [224, 224])
-image.set_shape((224, 224, 3))
+image = tf.image.resize_images(image_orig, [48, 48])
+image.set_shape((48, 48, 3))
 num_preprocess_threads = 1
 min_queue_examples = 256
 
 images = tf.train.shuffle_batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=MIN_QUEUE_EXAMPLES + 3 * BATCH_SIZE, min_after_dequeue=MIN_QUEUE_EXAMPLES)
 
+
 with tf.Session() as sess:
+
 	tf.global_variables_initializer().run()
 
 	coord = tf.train.Coordinator()
@@ -67,3 +69,4 @@ with tf.Session() as sess:
 
 	coord.request_stop()
 	coord.join(threads)
+
