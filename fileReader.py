@@ -43,6 +43,7 @@ def labelFileInit():
 	key, value = reader.read(labelFile)
 FILES_TRAINING = filenameLister()
 
+labelFileInit()
 
 print(type(FILES_TRAINING))
 
