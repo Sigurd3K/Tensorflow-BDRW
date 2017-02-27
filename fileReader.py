@@ -36,6 +36,11 @@ def filenameLister():
 	print("Filedir: %s" % (FILEDIR))
 	return FILES_TRAINING
 
+def labelFileInit():
+	labelFile = eval("[\"" + LABEL_FILE + "\"]")
+	labelFile = tf.train.string_input_producer(labelFile)
+	reader = tf.TextLineReader()
+	key, value = reader.read(labelFile)
 FILES_TRAINING = filenameLister()
 
 
