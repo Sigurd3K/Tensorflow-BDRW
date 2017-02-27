@@ -28,6 +28,10 @@ BATCH_SIZE = 50
 NUM_PREPROCESS_THREADS = 1
 MIN_QUEUE_EXAMPLES= 256
 
+
+W = tf.Variable(tf.zeros([2304,10]))
+b = tf.Variable(tf.zeros([10]))
+
 # print(LABEL_FILE)
 
 def filenameLister():
