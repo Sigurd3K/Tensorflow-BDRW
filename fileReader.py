@@ -32,23 +32,16 @@ def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
 	tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
 	print("Filedir: %s" % (FILEDIR))
-	#print("Training files dir: %s" % (TRAINING_DIR))
-	#print(type(FILES_TlRAINING))
 	return FILES_TRAINING
 
 FILES_TRAINING = filenameLister()
 
-# print("-------")
-# print(tf.gfile.Glob(TRAINING_DIR + "digit_*.jpg"))
-
-# print(FILES_TRAINING)
 
 print(type(FILES_TRAINING))
 
 
 image_reader = tf.WholeFileReader()
 
-# print(FILES_TRAINING)
 
 _, image_file = image_reader.read(FILES_TRAINING)
 
