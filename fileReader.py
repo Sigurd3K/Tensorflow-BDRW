@@ -22,6 +22,7 @@ VALIDATION_DIR = FILEDIR + '/BDRW_train_2/'
 LABEL_FILE = 'filedir'
 EPOCH_LIMIT = 50
 FILES_VALIDATION = 0
+BATCH_SIZE = 20
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
@@ -48,3 +49,19 @@ image_reader = tf.WholeFileReader()
 _, image_file = image_reader.read(FILES_TRAINING)
 
 image = tf.image.decode_jpeg(image_file)
+image.set_shape((102, 136, 3))
+num_preprocess_threads = 1
+min_queue_examples = 256
+
+
+with tf.Session() as sess:
+	tf.global_variables_initializer().run()
+
+	coord = tf.train.Coordinator()
+	threads = tf.train.start_queue_runners(coord=coord)
+
+	image_tensor = sess.run([image])
+	print(image_tensor)
+
+	coord.request_stop()
+	coord.join(threads)
