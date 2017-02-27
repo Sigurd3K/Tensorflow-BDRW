@@ -22,7 +22,9 @@ VALIDATION_DIR = FILEDIR + '/BDRW_train_2/'
 LABEL_FILE = 'filedir'
 EPOCH_LIMIT = 50
 FILES_VALIDATION = 0
-BATCH_SIZE = 20
+BATCH_SIZE = 50
+NUM_PREPROCESS_THREADS = 1
+MIN_QUEUE_EXAMPLES= 256
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
