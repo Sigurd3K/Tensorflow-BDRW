@@ -31,7 +31,15 @@ MIN_QUEUE_EXAMPLES= 256
 print(LABEL_FILE)
 
 
+
+# W = tf.Variable(tf.zeros([2304,10]))
+# b = tf.Variable(tf.zeros([10]))
+
+image_name = tf.placeholder(tf.string, name='image_name')
+image_class = tf.placeholder(tf.string, name='image_class')
+
 # print(LABEL_FILE)
+
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
