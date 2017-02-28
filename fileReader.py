@@ -47,11 +47,24 @@ def filenameLister():
 	print("Filedir: %s" % (FILEDIR))
 	return FILES_TRAINING
 
+
+def labelFileInit(filename_queue):
+	reader = tf.TextLineReader(skip_header_lines=0)
+	_, csv_row = reader.read(filename_queue)
+	record_defaults = [["Image1"], ["5"]]
+	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults)
+	return image_name, image_class
+
 FILES_TRAINING = filenameLister()
 
 labelFileInit()
 
 print(type(FILES_TRAINING))
+labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], num_epochs=1, shuffle=False)
+
+image_name, image_class = labelFileInit(labelFile_queue)
+print(labelFile_queue)
+
 
 
 image_reader = tf.WholeFileReader()
@@ -69,19 +82,37 @@ images = tf.train.shuffle_batch([image], batch_size=BATCH_SIZE, num_threads=NUM_
 
 
 with tf.Session() as sess:
-
 	tf.global_variables_initializer().run()
+	tf.initialize_local_variables().run()
 
 	writer = tf.summary.FileWriter("./logs")
 	writer.add_graph(sess.graph)
 
 	coord = tf.train.Coordinator()
 	threads = tf.train.start_queue_runners(coord=coord)
+	looper = 0
+
+	while True:
+		try:
+			looper += 1
+			# print(looper)
+			# print("WHILE TRUE")
+			image_name_ts, image_class_ts = sess.run([image_name, image_class])
+			# print("END WHILE")
+			print(image_name_ts, image_class_ts)
+			# print("END WHILE 2")
+		except tf.errors.OutOfRangeError:
+			# Bij epoch = 1 in de queue geeft TextLineReader of de queue een outOfRange exception als er geen lines meer over zijn om te readen
+			print(looper)
+			print("Out of range error")
+			print("@@@@@@@@@@@@@@@@################@@@@@=================++++++++++++++++=")
+			break
 
 	image_tensor = sess.run([images])
+
+
 	print(image_tensor)
 	print(len(image_tensor[0]))
 
 	coord.request_stop()
 	coord.join(threads)
-
