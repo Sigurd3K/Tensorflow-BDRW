@@ -30,8 +30,6 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
-W = tf.Variable(tf.zeros([2304,10]))
-b = tf.Variable(tf.zeros([10]))
 
 # print(LABEL_FILE)
 
