@@ -21,31 +21,53 @@ print("== fileReader.py ==")
 FILEDIR = './data/BDRW_train'
 TRAINING_DIR= FILEDIR + '/BDRW_train_1/'
 VALIDATION_DIR = FILEDIR + '/BDRW_train_2/'
-LABEL_FILE = FILEDIR+ '/BDRW_train_2/labels.csv'
+LABEL_FILE = FILEDIR + '/BDRW_train_2/labels.csv'
 EPOCH_LIMIT = 50
 FILES_VALIDATION = 0
 BATCH_SIZE = 50
 NUM_PREPROCESS_THREADS = 1
 MIN_QUEUE_EXAMPLES= 256
 
+print(LABEL_FILE)
+
+
+
+# W = tf.Variable(tf.zeros([2304,10]))
+# b = tf.Variable(tf.zeros([10]))
+
+image_name = tf.placeholder(tf.string, name='image_name')
+image_class = tf.placeholder(tf.string, name='image_class')
+
 # print(LABEL_FILE)
+
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
-	tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
+		tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
 	print("Filedir: %s" % (FILEDIR))
 	return FILES_TRAINING
 
-def labelFileInit():
-	labelFile = eval("[\"" + LABEL_FILE + "\"]")
-	labelFile = tf.train.string_input_producer(labelFile)
-	reader = tf.TextLineReader()
-	key, value = reader.read(labelFile)
+
+def labelFileInit(filename_queue):
+	reader = tf.TextLineReader(skip_header_lines=0)
+	_, csv_row = reader.read(filename_queue)
+	record_defaults = [["Image1"], ["5"]]
+	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults)
+	return image_name, image_class
+
 FILES_TRAINING = filenameLister()
 
-labelFileInit()
+# labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
+print("[\"" + LABEL_FILE + "\"]")
+# labelFile_queue = tf.train.string_input_producer(["olympics2016.csv"], num_epochs=1, shuffle=False) // werkt niet met num_epochs=1 erbij. OM SHUFFLE TE KUNNEN GEBRUIKEN MOET JE INIT VAR EN RUN DOEN IN VARS
+# labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], shuffle=False)
 
-print(type(FILES_TRAINING))
+labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], num_epochs=1, shuffle=False)
+
+image_name, image_class = labelFileInit(labelFile_queue)
+print(labelFile_queue)
+
+# print(type(FILES_TRAINING))
 
 
 image_reader = tf.WholeFileReader()
@@ -63,19 +85,37 @@ images = tf.train.shuffle_batch([image], batch_size=BATCH_SIZE, num_threads=NUM_
 
 
 with tf.Session() as sess:
-
 	tf.global_variables_initializer().run()
+	tf.initialize_local_variables().run()
 
 	writer = tf.summary.FileWriter("./logs")
 	writer.add_graph(sess.graph)
 
 	coord = tf.train.Coordinator()
 	threads = tf.train.start_queue_runners(coord=coord)
+	looper = 0
+
+	while True:
+		try:
+			looper += 1
+			# print(looper)
+			# print("WHILE TRUE")
+			image_name_ts, image_class_ts = sess.run([image_name, image_class])
+			# print("END WHILE")
+			print(image_name_ts, image_class_ts)
+			# print("END WHILE 2")
+		except tf.errors.OutOfRangeError:
+			# Bij epoch = 1 in de queue geeft TextLineReader of de queue een outOfRange exception als er geen lines meer over zijn om te readen
+			print(looper)
+			print("Out of range error")
+			print("@@@@@@@@@@@@@@@@################@@@@@=================++++++++++++++++=")
+			break
 
 	image_tensor = sess.run([images])
+
+
 	print(image_tensor)
 	print(len(image_tensor[0]))
 
 	coord.request_stop()
 	coord.join(threads)
-
