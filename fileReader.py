@@ -43,15 +43,10 @@ image_class = tf.placeholder(tf.string, name='image_class')
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
-	tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
+		tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
 	print("Filedir: %s" % (FILEDIR))
 	return FILES_TRAINING
 
-def labelFileInit():
-	labelFile = eval("[\"" + LABEL_FILE + "\"]")
-	labelFile = tf.train.string_input_producer(labelFile)
-	reader = tf.TextLineReader()
-	key, value = reader.read(labelFile)
 FILES_TRAINING = filenameLister()
 
 labelFileInit()
