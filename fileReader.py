@@ -62,7 +62,6 @@ print("[\"" + LABEL_FILE + "\"]")
 # labelFile_queue = tf.train.string_input_producer(["olympics2016.csv"], num_epochs=1, shuffle=False) // werkt niet met num_epochs=1 erbij. OM SHUFFLE TE KUNNEN GEBRUIKEN MOET JE INIT VAR EN RUN DOEN IN VARS
 # labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], shuffle=False)
 
-print(type(FILES_TRAINING))
 labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], num_epochs=1, shuffle=False)
 
 image_name, image_class = labelFileInit(labelFile_queue)
