@@ -114,6 +114,8 @@ images = tf.train.shuffle_batch([image], batch_size=BATCH_SIZE, num_threads=NUM_
 
 cross_entropy = tf.reduce_mean(
     tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y))
+	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
+	)
 train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
 
 
@@ -130,6 +132,10 @@ with tf.Session() as sess:
 	coord = tf.train.Coordinator()
 	threads = tf.train.start_queue_runners(coord=coord)
 	looper = 0
+
+	# for _ in range(1000):
+	# 	batch_xs, batch_ys = sess.run([images])
+	# 	sess.run(train_step, feed_dict={x: batch_xs, y_: batch_ys})
 
 
 	try:
