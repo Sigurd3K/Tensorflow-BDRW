@@ -63,7 +63,7 @@ def labelFileInit(filename_queue):
 	)
 
 	image_class = tf.one_hot(image_class, 10, on_value=1, off_value=0)
-	print(image_class)l
+	print(image_class)
 	return image_name, image_class
 
 def labelFileBatchProcessor(batch_size, num_epochs=None):
