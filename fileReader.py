@@ -31,10 +31,12 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
+W = tf.Variable(tf.zeros([2304,10]))
+b = tf.Variable(tf.zeros([10]))
 
 x = tf.placeholder(tf.float32, shape=[None, 2304])
+y = tf.matmul(x,W) + b
 y_ = tf.placeholder(tf.float32, shape=[None, 10])
-
 
 image_name = tf.placeholder(tf.string, name='image_name')
 image_class = tf.placeholder(tf.string, name='image_class')
@@ -89,7 +91,6 @@ FILES_TRAINING = filenameLister()
 print("[\"" + LABEL_FILE + "\"]")
 # labelFile_queue = tf.train.string_input_producer(["olympics2016.csv"], num_epochs=1, shuffle=False) // werkt niet met num_epochs=1 erbij. OM SHUFFLE TE KUNNEN GEBRUIKEN MOET JE INIT VAR EN RUN DOEN IN VARS
 # labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], shuffle=False)
-
 
 
 # print(type(FILES_TRAINING))
