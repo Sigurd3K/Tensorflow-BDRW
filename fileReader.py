@@ -15,6 +15,8 @@ Example queue
 
 import tensorflow as tf
 import numpy as np
+from colored import fg, bg, attr
+
 
 print(" ")
 print("== fileReader.py ==")
@@ -151,8 +153,8 @@ with tf.Session() as sess:
 	except tf.errors.OutOfRangeError:
 		# Bij epoch = 1 in de queue geeft TextLineReader of de queue een outOfRange exception als er geen lines meer over zijn om te readen
 		print(looper)
-		print("Out of range error")
-		print("@@@@@@@@@@@@@@@@################@@@@@=================++++++++++++++++=")
+		print('%s%s =========== Out of range error =========== %s' % (fg('white'), bg('yellow'), attr('reset')))
+		print('%s%s === Stopped loading of one-hot labels ==== %s' % (fg('white'), bg('yellow'), attr('reset')))
 	finally:
 		coord.request_stop()
 
@@ -162,6 +164,7 @@ with tf.Session() as sess:
 
 	print(image_tensor)
 	print(len(image_tensor[0]))
+
 
 	coord.request_stop()
 	coord.join(threads)
