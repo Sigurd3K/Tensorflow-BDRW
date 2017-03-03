@@ -4,6 +4,14 @@
 # Swap files
 *.swp
 
+# Geen Tensorflow logs in git bijhouden.
+logs
+
+# Virtual Environment files
+bin
+dist
+eggs
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
