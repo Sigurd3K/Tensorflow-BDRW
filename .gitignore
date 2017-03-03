@@ -5,12 +5,14 @@
 *.swp
 
 # Geen Tensorflow logs in git bijhouden.
-logs
+[Ll]ogs
 
 # Virtual Environment files
-bin
-dist
-eggs
+[Bb]in
+[Dd]ist
+[Ee]ggs
+[Ii]nclude
+pip-selfcheck.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
