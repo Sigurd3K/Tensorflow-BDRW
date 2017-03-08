@@ -78,7 +78,6 @@ with tf.Session() as sess:
 
 
 	print(image_tensor)
-	print(len(image_tensor[0]))
 
 
 	coord.request_stop()

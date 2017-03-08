@@ -37,7 +37,7 @@ W = tf.Variable(tf.zeros([2304,10]))
 b = tf.Variable(tf.zeros([10]))
 
 x = tf.placeholder(tf.float32, shape=[None, 2304])
-y = tf.matmul(x,W) + b
+y = tf.matmul(x, W) + b
 y_ = tf.placeholder(tf.float32, shape=[None, 10])
 
 image_name = tf.placeholder(tf.string, name='image_name')
@@ -47,6 +47,7 @@ image_class = tf.placeholder(tf.string, name='image_class')
 # image_class_batch = tf.placeholder(dtype=tf.int8, shape=[None, ], name='image_class_batch')
 
 # evaluation_labels = tf.placeholder(tf.float)
+
 
 def filenameLister():
 	FILES_TRAINING = tf.train.string_input_producer(
@@ -82,6 +83,7 @@ def labelFileBatchProcessor(batch_size, num_epochs=None):
 
 
 image_name_batch, image_class_batch = labelFileBatchProcessor(50, 1)
+
 
 FILES_TRAINING = filenameLister()
 FILES_VALIDATION = filenameLister()
