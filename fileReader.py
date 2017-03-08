@@ -56,6 +56,19 @@ def filenameLister():
 	return FILES_TRAINING
 
 
+def filenameLister2(imageNameBatch):
+	print('%s%s filenameLister2 %s' % (fg('white'), bg('blue'), attr('reset')))
+	# FILES_TRAINING = tf.train.string_input_producer(
+	# 	tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
+	# trainingfiles = [TRAINING_DIR + img + "jpg" for img in range(imageNameBatch)]
+	trainingfiles = ["jpg" for img in range(imageNameBatch.eval(session=sess))]
+	print(trainingfiles)
+	# FILES_TRAINING = tf.train.string_input_producer([TRAINING_DIR + img + "jpg" for img in range(imageNameBatch)])
+	# print("Filedir: %s" % (FILEDIR))
+	print('%s%s filenameLister2 END %s' % (fg('white'), bg('blue'), attr('reset')))
+	return FILES_TRAINING
+
+
 def labelFileInit(filename_queue):
 	reader = tf.TextLineReader(skip_header_lines=0)
 	_, csv_row = reader.read(filename_queue)
@@ -87,6 +100,8 @@ image_name_batch, image_class_batch = labelFileBatchProcessor(50, 1)
 
 FILES_TRAINING = filenameLister()
 FILES_VALIDATION = filenameLister()
+FILES_TRAINING2 = filenameLister2(image_name_batch)
+# FILES_VALIDATION2 = filenameLister()
 
 # labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
 print("[\"" + LABEL_FILE + "\"]")

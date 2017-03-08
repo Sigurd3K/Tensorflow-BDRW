@@ -79,6 +79,16 @@ with tf.Session() as sess:
 
 	print(image_tensor)
 
+	x = fR.FILES_TRAINING.dequeue_many(10)
+	test = x + " Tes"
+
+	print('%s%s Print test: %s %s' % (fg('white'), bg('red'), test, attr('reset')))
+	# tf.Print(data = [test], message=None, first_n=None, summarize=None, name=None)
+	printSmallQueue = tf.Print(test, [test], message="Looo: ", summarize=10)
+	sess.run(printSmallQueue)
+	# tf.Print('%s%s Length of image tensor: %s %s' % (fg('white'), bg('red'), len(image_tensor[0]), attr('reset')))
+
+
 
 	coord.request_stop()
 	coord.join(threads)
