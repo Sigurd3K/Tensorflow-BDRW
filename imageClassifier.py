@@ -31,7 +31,13 @@ weights = {
 	'gamma': [bi(0.0, layer_sizes[l+1], "beta") for l in range(number_of_layers)],
 	}
 
-# -- End of Classifier variables --
+# -- End of Classifier variables --z`
+
+# cross_entropy = tf.reduce_mean(
+# 	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
+# 	)
+# train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+
 
 with tf.Session() as sess:
 	tf.global_variables_initializer().run()

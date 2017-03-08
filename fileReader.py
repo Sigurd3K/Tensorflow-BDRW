@@ -103,12 +103,3 @@ num_preprocess_threads = 1
 min_queue_examples = 256
 
 images = tf.train.shuffle_batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=MIN_QUEUE_EXAMPLES + 3 * BATCH_SIZE, min_after_dequeue=MIN_QUEUE_EXAMPLES)
-
-
-######### START MACHINE LEARNING ############
-
-cross_entropy = tf.reduce_mean(
-	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
-	)
-train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
-
