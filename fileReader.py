@@ -84,6 +84,7 @@ def labelFileBatchProcessor(batch_size, num_epochs=None):
 image_name_batch, image_class_batch = labelFileBatchProcessor(50, 1)
 
 FILES_TRAINING = filenameLister()
+FILES_VALIDATION = filenameLister()
 
 # labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
 print("[\"" + LABEL_FILE + "\"]")
