@@ -33,10 +33,10 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
-W = tf.Variable(tf.zeros([2304,10]))
+W = tf.Variable(tf.zeros([2304,10]), name="sd")
 b = tf.Variable(tf.zeros([10]))
 
-x = tf.placeholder(tf.float32, shape=[None, 2304])
+x = tf.placeholder(tf.float32, shape=[None, 2304], name="flat_IMG")
 y = tf.matmul(x, W) + b
 y_ = tf.placeholder(tf.float32, shape=[None, 10])
 
