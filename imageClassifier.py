@@ -59,12 +59,14 @@ with tf.Session() as sess:
 			looper += 1
 			print(looper)
 			# print("WHILE TRUE")
-			image_name_batch_b, image_class_batch_b = sess.run([fR.image_name_batch, fR.image_class_batch]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			image_name_batch_b, image_class_batch_b = sess.run([fR.image_tra_name_batch, fR.image_tra_class_batch]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			image_class_batch_c = sess.run([fR.images])
 			# print(type(image_name_batch))
 			print(" ")
 			print("======== Batches uit de CSV ========")
 			print(" ")
 			print(image_name_batch_b, image_class_batch_b)
+			print(image_class_batch_c)
 	except tf.errors.OutOfRangeError:
 		# Bij epoch = 1 in de queue geeft TextLineReader of de queue een outOfRange exception als er geen lines meer over zijn om te readen
 		print(looper)
@@ -74,18 +76,18 @@ with tf.Session() as sess:
 		coord.request_stop()
 
 
-	image_tensor = sess.run([fR.images])
+	# image_tensor = sess.run([fR.images])
 
 
-	print(image_tensor)
+	# print(image_tensor)
 
-	x = fR.FILES_TRAINING.dequeue_many(10)
-	test = x + " Tes"
+	# x = fR.FILES_TRAINING.dequeue_many(10)
+	# test = x + " Tes"
 
-	print('%s%s Print test: %s %s' % (fg('white'), bg('red'), test, attr('reset')))
+	# print('%s%s Print test: %s %s' % (fg('white'), bg('red'), test, attr('reset')))
 	# tf.Print(data = [test], message=None, first_n=None, summarize=None, name=None)
-	printSmallQueue = tf.Print(test, [test], message="Looo: ", summarize=10)
-	sess.run(printSmallQueue)
+	# printSmallQueue = tf.Print(test, [test], message="Looo: ", summarize=10)
+	# sess.run(printSmallQueue)
 	# tf.Print('%s%s Length of image tensor: %s %s' % (fg('white'), bg('red'), len(image_tensor[0]), attr('reset')))
 
 
