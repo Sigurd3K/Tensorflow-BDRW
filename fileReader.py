@@ -49,11 +49,11 @@ image_class = tf.placeholder(tf.string, name='image_class')
 # evaluation_labels = tf.placeholder(tf.float)
 
 
-def filenameLister():
-	FILES_TRAINING = tf.train.string_input_producer(
-		tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
-	print("Filedir: %s" % (FILEDIR))
-	return FILES_TRAINING
+# def filenameLister():
+# 	FILES_TRAINING = tf.train.string_input_producer(
+# 		tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
+# 	print("Filedir: %s" % (FILEDIR))
+# 	return FILES_TRAINING
 
 
 def filenameLister2(imageNameBatch):
