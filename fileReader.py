@@ -33,12 +33,12 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
-W = tf.Variable(tf.zeros([2304,10]), name="sd")
-b = tf.Variable(tf.zeros([10]))
+W = tf.Variable(tf.zeros([2304,10]), name="Weights")
+b = tf.Variable(tf.zeros([10]), name="Biases")
 
 x = tf.placeholder(tf.float32, shape=[None, 2304], name="flat_IMG")
 y = tf.matmul(x, W) + b
-y_ = tf.placeholder(tf.float32, shape=[None, 10])
+y_ = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 
 image_name = tf.placeholder(tf.string, name='image_name')
 image_class = tf.placeholder(tf.string, name='image_class')
@@ -68,8 +68,7 @@ def labelFileInit(filename_queue):
 	reader = tf.TextLineReader(skip_header_lines=0)
 	_, csv_row = reader.read(filename_queue)
 	record_defaults = [['Image1'], [5]]
-	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults
-	)
+	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults)
 
 	image_class = tf.one_hot(image_class, 10, on_value=1, off_value=0)
 	print(image_class)
