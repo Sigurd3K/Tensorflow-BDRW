@@ -58,13 +58,8 @@ def filenameLister():
 
 def filenameLister2(imageNameBatch):
 	print('%s%s filenameLister2 %s' % (fg('white'), bg('blue'), attr('reset')))
-	# FILES_TRAINING = tf.train.string_input_producer(
-	# 	tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
-	# trainingfiles = [TRAINING_DIR + img + "jpg" for img in range(imageNameBatch)]
-	trainingfiles = ["jpg" for img in range(imageNameBatch.eval(session=sess))]
-	print(trainingfiles)
-	# FILES_TRAINING = tf.train.string_input_producer([TRAINING_DIR + img + "jpg" for img in range(imageNameBatch)])
-	# print("Filedir: %s" % (FILEDIR))
+	FILES_TRAINING = TRAINING_DIR + imageNameBatch + ".jpg"
+	FILES_TRAINING = tf.train.string_input_producer(FILES_TRAINING, name="CSVFilenames")
 	print('%s%s filenameLister2 END %s' % (fg('white'), bg('blue'), attr('reset')))
 	return FILES_TRAINING
 
@@ -80,8 +75,14 @@ def labelFileInit(filename_queue):
 	print(image_class)
 	return image_name, image_class
 
-def labelFileBatchProcessor(batch_size, num_epochs=None):
-	labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], num_epochs=1, shuffle=False)
+
+def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
+	if what_set == "training":
+		inputCsv = ["./data/BDRW_train/BDRW_train_1/labels.csv"]
+	elif what_set == "validation":
+		inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
+	# inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
+	labelFile_queue = tf.train.string_input_producer(inputCsv, num_epochs=1, shuffle=False)
 	image_name, image_class = labelFileInit(labelFile_queue)
 	# print(labelFile_queue)
 	min_after_dequeue = 50
@@ -95,13 +96,14 @@ def labelFileBatchProcessor(batch_size, num_epochs=None):
 	return image_name_batch, image_class_batch
 
 
-image_name_batch, image_class_batch = labelFileBatchProcessor(50, 1)
+image_tra_name_batch, image_tra_class_batch = labelFileBatchProcessor(50, 1, "training")
+image_val_name_batch, image_val_class_batch = labelFileBatchProcessor(50, 1, "validation")
 
 
-FILES_TRAINING = filenameLister()
-FILES_VALIDATION = filenameLister()
-FILES_TRAINING2 = filenameLister2(image_name_batch)
-# FILES_VALIDATION2 = filenameLister()
+# FILES_TRAINING = filenameLister()
+# FILES_VALIDATION = filenameLister()
+FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
+FILES_VALIDATION2 = filenameLister2(image_val_name_batch)
 
 # labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
 print("[\"" + LABEL_FILE + "\"]")
@@ -112,7 +114,7 @@ print("[\"" + LABEL_FILE + "\"]")
 image_reader = tf.WholeFileReader()
 
 
-_, image_file = image_reader.read(FILES_TRAINING)
+_, image_file = image_reader.read(FILES_TRAINING2)
 
 image_orig = tf.image.decode_jpeg(image_file)
 image = tf.image.resize_images(image_orig, [48, 48])
@@ -120,4 +122,5 @@ image.set_shape((48, 48, 3))
 num_preprocess_threads = 1
 min_queue_examples = 256
 
+# Mag later weg, zorgt voor moeilijkheden:
 images = tf.train.shuffle_batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=MIN_QUEUE_EXAMPLES + 3 * BATCH_SIZE, min_after_dequeue=MIN_QUEUE_EXAMPLES)
