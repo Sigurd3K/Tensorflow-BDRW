@@ -80,7 +80,7 @@ with tf.Session() as sess:
 				print(image_class_batch_b)
 				imt = plt.imshow(image_batch_c[0][0]/255)
 
-				print(img)
+				# print(img)
 				print(" Afbeelding uit mijn batch: ")
 				print(image_batch_c[0][0]/255)
 
