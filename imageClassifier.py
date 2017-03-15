@@ -63,9 +63,6 @@ with tf.Session() as sess:
 		while not coord.should_stop():
 			looper += 1
 			print(looper)
-			# print("WHILE TRUE")
-			# image_name_batch_b, image_class_batch_b = sess.run([fR.image_tra_name_batch, fR.image_tra_class_batch]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-			# image_batch_c = sess.run([fR.images])
 			training_set_name, training_set_class, training_set_image = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 			# print(type(image_name_batch))
 			# print(" ")
