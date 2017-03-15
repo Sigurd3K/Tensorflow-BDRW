@@ -63,8 +63,9 @@ with tf.Session() as sess:
 			looper += 1
 			print(looper)
 			# print("WHILE TRUE")
-			image_name_batch_b, image_class_batch_b = sess.run([fR.image_tra_name_batch, fR.image_tra_class_batch]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-			image_batch_c = sess.run([fR.images])
+			# image_name_batch_b, image_class_batch_b = sess.run([fR.image_tra_name_batch, fR.image_tra_class_batch]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			# image_batch_c = sess.run([fR.images])
+			training_set_name, training_set_class, training_set_image = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 			# print(type(image_name_batch))
 			# print(" ")
 			# print("======== Batches uit de CSV ========")
@@ -75,14 +76,14 @@ with tf.Session() as sess:
 			if printedTest == False:
 				plt.style.use("ggplot")
 				print('%s%s =========== TEST SAMPLE =========== %s' % (fg('white'), bg('green'), attr('reset')))
-				print(image_name_batch_b)
+				print(training_set_name)
 				print(" ")
-				print(image_class_batch_b)
-				imt = plt.imshow(image_batch_c[0][0]/255)
+				print(training_set_class)
+				imt = plt.imshow(training_set_image[0][0]/255)
 
 				# print(img)
 				print(" Afbeelding uit mijn batch: ")
-				print(image_batch_c[0][0]/255)
+				print(training_set_image[0][0]/255)
 
 				# print(image_batch_c[0][0].shape)
 				# print(img.shape)

@@ -95,14 +95,12 @@ def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
 	return image_name_batch, image_class_batch
 
 
-
-image_tra_name_batch, image_tra_class_batch = labelFileBatchProcessor(50, 1, "training")
 image_val_name_batch, image_val_class_batch = labelFileBatchProcessor(50, 1, "validation")
 
 
 # FILES_TRAINING = filenameLister()
 # FILES_VALIDATION = filenameLister()
-FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
+# FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
 FILES_VALIDATION2 = filenameLister2(image_val_name_batch)
 
 # labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
@@ -111,10 +109,10 @@ print("[\"" + LABEL_FILE + "\"]")
 # labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], shuffle=False)
 
 
-def build_images(FILES_TRAINING2):
+def build_images(files_training):
 	image_reader = tf.WholeFileReader()
-	FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
-	_, image_file = image_reader.read(FILES_TRAINING2)
+	# FILES_TRAINING2 = filenameLister2(files_training)
+	_, image_file = image_reader.read(files_training)
 	image_orig = tf.image.decode_jpeg(image_file)
 	image = tf.image.resize_images(image_orig, [48, 48])
 	image.set_shape((48, 48, 3))
@@ -123,4 +121,16 @@ def build_images(FILES_TRAINING2):
 	images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE)
 	return images
 
-images = build_images(FILES_TRAINING2)
+
+def return_training_set():
+	image_tra_name_batch, image_tra_class_batch = labelFileBatchProcessor(50, 1, "training")
+	files_training = filenameLister2(image_tra_name_batch)
+	images2 = build_images(files_training)
+	return image_tra_name_batch, image_tra_class_batch, images2
+
+
+training_set_name, training_set_class, training_set_image = return_training_set()
+
+
+# Functie kan niet rechtreeks met een run in sessie worden aangeroepen in Tensorflow dus moet eerst in een var worden gestoken.
+# images = build_images(FILES_TRAINING2)
