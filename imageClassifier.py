@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
 # -- Classifier variables --
-
+'''
 layer_sizes = [2304, 3000, 500, 250, 250, 250, 10]
 shapes = zip(layer_sizes[:-1], layer_sizes[1:]) #Element 1 en 2 worden samen in tuple gestoken enz omdat lists ten opzichte van elkaar met 1 verschuiven.
 number_of_layers = len(layer_sizes) - 1
@@ -32,6 +32,7 @@ weights = {
 	'beta': [bi(0.0, layer_sizes[l+1], "beta") for l in range(number_of_layers)],
 	'gamma': [bi(0.0, layer_sizes[l+1], "beta") for l in range(number_of_layers)],
 	}
+'''
 
 # -- End of Classifier variables --z`
 
