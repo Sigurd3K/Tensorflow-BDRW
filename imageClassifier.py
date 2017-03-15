@@ -79,11 +79,11 @@ with tf.Session() as sess:
 				print(training_set_name)
 				print(" ")
 				print(training_set_class)
-				imt = plt.imshow(training_set_image[0][0]/255)
+				imt = plt.imshow(training_set_image[0]/255)
 
 				# print(img)
 				print(" Afbeelding uit mijn batch: ")
-				print(training_set_image[0][0]/255)
+				print(training_set_image[0]/255)
 
 				# print(image_batch_c[0][0].shape)
 				# print(img.shape)
