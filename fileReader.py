@@ -88,8 +88,7 @@ def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
 	capacity = min_after_dequeue + 3 * batch_size
 	image_name_batch, image_class_batch = tf.train.shuffle_batch(
 		[image_name, image_class], batch_size=batch_size, capacity=capacity,
-		min_after_dequeue=min_after_dequeue)
-
+		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
 	print(" END OF FUNCTION LFBP")
 
 	return image_name_batch, image_class_batch
@@ -118,13 +117,15 @@ def build_images(files_training):
 	image.set_shape((48, 48, 3))
 	num_preprocess_threads = 1
 	min_queue_examples = 256
-	images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE)
+	images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE, allow_smaller_final_batch=True)
 	return images
 
 
 def return_training_set():
 	image_tra_name_batch, image_tra_class_batch = labelFileBatchProcessor(50, 1, "training")
+	# SHA1 Hashes van de afbeeldingen berekenen in een loop en deze misschien zo opzoeken?
 	files_training = filenameLister2(image_tra_name_batch)
+
 	images2 = build_images(files_training)
 	return image_tra_name_batch, image_tra_class_batch, images2
 
