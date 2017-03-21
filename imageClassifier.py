@@ -63,7 +63,8 @@ with tf.Session() as sess:
 		while not coord.should_stop():
 			looper += 1
 			print(looper)
-			training_set_name, training_set_class, training_set_image = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			# print(training_set_image)
 			# print(type(image_name_batch))
 			# print(" ")
 			# print("======== Batches uit de CSV ========")
@@ -77,11 +78,14 @@ with tf.Session() as sess:
 				print(training_set_name)
 				print(" ")
 				print(training_set_class)
-				imt = plt.imshow(training_set_image[0]/255)
+				imt = plt.imshow(training_set_image[2]/255)
+
 
 				# print(img)
 				print(" Afbeelding uit mijn batch: ")
-				print(training_set_image[0]/255)
+				# print(training_set_image[0]/255)
+				print(filename[2])
+				filename
 
 				# print(image_batch_c[0][0].shape)
 				# print(img.shape)

@@ -71,8 +71,12 @@ def labelFileInit(filename_queue):
 	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults)
 
 	image_class = tf.one_hot(image_class, 10, on_value=1, off_value=0)
+	filename = [TRAINING_DIR + image_name + ".jpg"]
+
+	# filenames_queue = tf.train.string_input_producer(filename, name="CSVFilenames", shuffle=False)
+
 	print(image_class)
-	return image_name, image_class
+	return image_name, image_class, filename
 
 
 def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
@@ -82,25 +86,40 @@ def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
 		inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
 	# inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
 	labelFile_queue = tf.train.string_input_producer(inputCsv, num_epochs=1, shuffle=False)
-	image_name, image_class = labelFileInit(labelFile_queue)
+
+	image_name, image_class, filename = labelFileInit(labelFile_queue)
 	# print(labelFile_queue)
 	min_after_dequeue = 50
 	capacity = min_after_dequeue + 3 * batch_size
-	image_name_batch, image_class_batch = tf.train.shuffle_batch(
-		[image_name, image_class], batch_size=batch_size, capacity=capacity,
+
+	# filenames = [TRAINING_DIR + image_name + ".jpg"]
+
+	# In de queue gaat het mis
+	# files_training = tf.train.string_input_producer(filenames, name="CSVFilenames",  shuffle=False)
+	# images = build_images(files_training)
+
+	image = build_images(filename)
+
+
+	image_name_batch, image_class_batch, images, filename = tf.train.shuffle_batch(
+		[image_name, image_class, image, filename], batch_size=50, capacity=capacity,
 		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
 	print(" END OF FUNCTION LFBP")
 
-	return image_name_batch, image_class_batch
 
 
-image_val_name_batch, image_val_class_batch = labelFileBatchProcessor(50, 1, "validation")
+
+
+	return image_name_batch, image_class_batch, images, filename
+
+
+# image_val_name_batch, image_val_class_batch, images = labelFileBatchProcessor(50, 1, "validation")
 
 
 # FILES_TRAINING = filenameLister()
 # FILES_VALIDATION = filenameLister()
 # FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
-FILES_VALIDATION2 = filenameLister2(image_val_name_batch)
+# FILES_VALIDATION2 = filenameLister2(image_val_name_batch)
 
 # labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
 print("[\"" + LABEL_FILE + "\"]")
@@ -109,29 +128,27 @@ print("[\"" + LABEL_FILE + "\"]")
 
 
 def build_images(files_training):
-	image_reader = tf.WholeFileReader()
+	image_file = tf.read_file(files_training[0])
 	# FILES_TRAINING2 = filenameLister2(files_training)
-	_, image_file = image_reader.read(files_training)
+	# _, image_file = image_reader.read(files_training)
 	image_orig = tf.image.decode_jpeg(image_file)
 	image = tf.image.resize_images(image_orig, [48, 48])
 	image.set_shape((48, 48, 3))
 	num_preprocess_threads = 1
 	min_queue_examples = 256
-	images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE, allow_smaller_final_batch=True)
-	return images
+	# images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE, allow_smaller_final_batch=True)
+	return image
 
 
 def return_training_set():
-	image_tra_name_batch, image_tra_class_batch = labelFileBatchProcessor(50, 1, "training")
+	# image_tra_name_batch = tf.Variable(name=image_tra_name_batch)
+	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(50, 1, "training")
 	# SHA1 Hashes van de afbeeldingen berekenen in een loop en deze misschien zo opzoeken?
-	files_training = filenameLister2(image_tra_name_batch)
 
-	images2 = build_images(files_training)
-	return image_tra_name_batch, image_tra_class_batch, images2
+	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
 
-training_set_name, training_set_class, training_set_image = return_training_set()
-
+training_set_name, training_set_class, training_set_image, filenames = return_training_set()
 
 # Functie kan niet rechtreeks met een run in sessie worden aangeroepen in Tensorflow dus moet eerst in een var worden gestoken.
 # images = build_images(FILES_TRAINING2)
