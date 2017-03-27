@@ -111,3 +111,9 @@ def return_training_set():
 	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
 training_set_name, training_set_class, training_set_image, filenames = return_training_set()
+def return_eval_set():
+	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(50, 1, "validation")
+
+	return image_tra_name_batch, image_tra_class_batch, images, imagepath
+
+evaluation_set_name, evaluation_set_class, evaluation_training_set_image, evaluation_filenames = return_eval_set()
