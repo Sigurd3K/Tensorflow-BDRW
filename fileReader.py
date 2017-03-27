@@ -33,11 +33,14 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
-W = tf.Variable(tf.zeros([2304,10]), name="Weights")
+W = tf.Variable(tf.zeros([6912, 10]), name="Weights")
+# W = tf.Variable(tf.zeros([2304, 10]), name="Weights")
 b = tf.Variable(tf.zeros([10]), name="Biases")
 
-x = tf.placeholder(tf.float32, shape=[None, 2304], name="flat_IMG")
-y = tf.matmul(x, W) + b
+x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
+# x = tf.placeholder(tf.float32, shape=[None, 48, 48, 3], name="Image")
+
+y = tf.matmul(x, W) + b # Logits
 y_ = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 
 image_name = tf.placeholder(tf.string, name='image_name')
@@ -96,6 +99,7 @@ def build_images(files_training):
 	image_orig = tf.image.decode_jpeg(image_file)
 	image = tf.image.resize_images(image_orig, [48, 48])
 	image.set_shape((48, 48, 3))
+	image = tf.reshape(image, [-1])
 	num_preprocess_threads = 1
 	min_queue_examples = 256
 	return image
