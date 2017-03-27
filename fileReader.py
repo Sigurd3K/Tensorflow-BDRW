@@ -55,21 +55,24 @@ def labelFileInit(filename_queue):
 	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults)
 
 	image_class = tf.one_hot(image_class, 10, on_value=1, off_value=0)
-	filename = [TRAINING_DIR + image_name + ".jpg"]
+
+	if what_set == "training":
+		filename = [TRAINING_DIR + image_name + ".jpg"]
+	elif what_set == "validation":
+		filename = [VALIDATION_DIR + image_name + ".jpg"]
 
 	print(image_class)
 	return image_name, image_class, filename
 
 
-def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
+def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="validation"):
 	if what_set == "training":
 		inputCsv = ["./data/BDRW_train/BDRW_train_1/labels.csv"]
 	elif what_set == "validation":
 		inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
-	# inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
-	labelFile_queue = tf.train.string_input_producer(inputCsv, num_epochs=1, shuffle=False)
+	labelFile_queue = tf.train.string_input_producer(inputCsv, shuffle=False)
 
-	image_name, image_class, filename = labelFileInit(labelFile_queue)
+	image_name, image_class, filename = labelFileInit(labelFile_queue,  what_set=what_set)
 	# print(labelFile_queue)
 	min_after_dequeue = 50
 	capacity = min_after_dequeue + 3 * batch_size
@@ -79,6 +82,7 @@ def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
 	image_name_batch, image_class_batch, images, filename = tf.train.shuffle_batch(
 		[image_name, image_class, image, filename], batch_size=50, capacity=capacity,
 		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
+
 	print(" END OF FUNCTION LFBP")
 
 	return image_name_batch, image_class_batch, images, filename
