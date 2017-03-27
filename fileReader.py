@@ -57,8 +57,6 @@ def labelFileInit(filename_queue):
 	image_class = tf.one_hot(image_class, 10, on_value=1, off_value=0)
 	filename = [TRAINING_DIR + image_name + ".jpg"]
 
-	# filenames_queue = tf.train.string_input_producer(filename, name="CSVFilenames", shuffle=False)
-
 	print(image_class)
 	return image_name, image_class, filename
 
