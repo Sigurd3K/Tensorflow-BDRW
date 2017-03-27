@@ -48,7 +48,7 @@ image_class = tf.placeholder(tf.string, name='image_class')
 
 # evaluation_labels = tf.placeholder(tf.float)
 
-def labelFileInit(filename_queue):
+def labelFileInit(filename_queue, what_set):
 	reader = tf.TextLineReader(skip_header_lines=0)
 	_, csv_row = reader.read(filename_queue)
 	record_defaults = [['Image1'], [5]]
