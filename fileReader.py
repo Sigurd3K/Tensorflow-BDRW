@@ -48,22 +48,6 @@ image_class = tf.placeholder(tf.string, name='image_class')
 
 # evaluation_labels = tf.placeholder(tf.float)
 
-
-# def filenameLister():
-# 	FILES_TRAINING = tf.train.string_input_producer(
-# 		tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
-# 	print("Filedir: %s" % (FILEDIR))
-# 	return FILES_TRAINING
-
-
-def filenameLister2(imageNameBatch):
-	print('%s%s filenameLister2 %s' % (fg('white'), bg('blue'), attr('reset')))
-	FILES_TRAINING = TRAINING_DIR + imageNameBatch + ".jpg"
-	FILES_TRAINING = tf.train.string_input_producer(FILES_TRAINING, name="CSVFilenames")
-	print('%s%s filenameLister2 END %s' % (fg('white'), bg('blue'), attr('reset')))
-	return FILES_TRAINING
-
-
 def labelFileInit(filename_queue):
 	reader = tf.TextLineReader(skip_header_lines=0)
 	_, csv_row = reader.read(filename_queue)
@@ -92,63 +76,32 @@ def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
 	min_after_dequeue = 50
 	capacity = min_after_dequeue + 3 * batch_size
 
-	# filenames = [TRAINING_DIR + image_name + ".jpg"]
-
-	# In de queue gaat het mis
-	# files_training = tf.train.string_input_producer(filenames, name="CSVFilenames",  shuffle=False)
-	# images = build_images(files_training)
-
 	image = build_images(filename)
-
 
 	image_name_batch, image_class_batch, images, filename = tf.train.shuffle_batch(
 		[image_name, image_class, image, filename], batch_size=50, capacity=capacity,
 		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
 	print(" END OF FUNCTION LFBP")
 
-
-
-
-
 	return image_name_batch, image_class_batch, images, filename
 
 
-# image_val_name_batch, image_val_class_batch, images = labelFileBatchProcessor(50, 1, "validation")
-
-
-# FILES_TRAINING = filenameLister()
-# FILES_VALIDATION = filenameLister()
-# FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
-# FILES_VALIDATION2 = filenameLister2(image_val_name_batch)
-
-# labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
 print("[\"" + LABEL_FILE + "\"]")
-# labelFile_queue = tf.train.string_input_producer(["olympics2016.csv"], num_epochs=1, shuffle=False) // werkt niet met num_epochs=1 erbij. OM SHUFFLE TE KUNNEN GEBRUIKEN MOET JE INIT VAR EN RUN DOEN IN VARS
-# labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], shuffle=False)
 
 
 def build_images(files_training):
 	image_file = tf.read_file(files_training[0])
-	# FILES_TRAINING2 = filenameLister2(files_training)
-	# _, image_file = image_reader.read(files_training)
 	image_orig = tf.image.decode_jpeg(image_file)
 	image = tf.image.resize_images(image_orig, [48, 48])
 	image.set_shape((48, 48, 3))
 	num_preprocess_threads = 1
 	min_queue_examples = 256
-	# images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE, allow_smaller_final_batch=True)
 	return image
 
 
 def return_training_set():
-	# image_tra_name_batch = tf.Variable(name=image_tra_name_batch)
 	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(50, 1, "training")
-	# SHA1 Hashes van de afbeeldingen berekenen in een loop en deze misschien zo opzoeken?
 
 	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
-
 training_set_name, training_set_class, training_set_image, filenames = return_training_set()
-
-# Functie kan niet rechtreeks met een run in sessie worden aangeroepen in Tensorflow dus moet eerst in een var worden gestoken.
-# images = build_images(FILES_TRAINING2)

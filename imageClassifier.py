@@ -64,13 +64,6 @@ with tf.Session() as sess:
 			looper += 1
 			print(looper)
 			training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-			# print(training_set_image)
-			# print(type(image_name_batch))
-			# print(" ")
-			# print("======== Batches uit de CSV ========")
-			# print(" ")
-			# print(image_name_batch_b, image_class_batch_b)
-			# print(image_class_batch_c)
 
 			if printedTest == False:
 				plt.style.use("ggplot")
@@ -80,18 +73,11 @@ with tf.Session() as sess:
 				print(training_set_class)
 				imt = plt.imshow(training_set_image[2]/255)
 
-
-				# print(img)
 				print(" Afbeelding uit mijn batch: ")
-				# print(training_set_image[0]/255)
 				print(filename[2])
 				filename
 
-				# print(image_batch_c[0][0].shape)
-				# print(img.shape)
-				# raw_input()
 				input("Press Enter to continue...")
-				# print(img)
 
 				print('%s%s ======= END OF TEST SAMPLE ======= %s' % (fg('white'), bg('green'), attr('reset')))
 				printedTest = True
@@ -103,23 +89,6 @@ with tf.Session() as sess:
 		print('%s%s === Stopped loading of one-hot labels ==== %s' % (fg('white'), bg('yellow'), attr('reset')))
 	finally:
 		coord.request_stop()
-
-
-	# image_tensor = sess.run([fR.images])
-
-
-	# print(image_tensor)
-
-	# x = fR.FILES_TRAINING.dequeue_many(10)
-	# test = x + " Tes"
-
-	# print('%s%s Print test: %s %s' % (fg('white'), bg('red'), test, attr('reset')))
-	# tf.Print(data = [test], message=None, first_n=None, summarize=None, name=None)
-	# printSmallQueue = tf.Print(test, [test], message="Looo: ", summarize=10)
-	# sess.run(printSmallQueue)
-	# tf.Print('%s%s Length of image tensor: %s %s' % (fg('white'), bg('red'), len(image_tensor[0]), attr('reset')))
-
-
 
 	coord.request_stop()
 	coord.join(threads)
