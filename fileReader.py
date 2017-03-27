@@ -117,3 +117,17 @@ def return_eval_set():
 	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
 evaluation_set_name, evaluation_set_class, evaluation_training_set_image, evaluation_filenames = return_eval_set()
+
+# TRAINING STEPS
+
+# Loss
+cross_entropy = tf.reduce_mean(
+	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
+)
+
+train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+
+# Evaluation Steps
+correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+

@@ -64,6 +64,8 @@ with tf.Session() as sess:
 			looper += 1
 			print(looper)
 			training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			sess.run(fR.train_step, feed_dict={fR.x: training_set_image, fR.y_: training_set_class})
+			# print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
 
 			if printedTest == False:
 				plt.style.use("ggplot")
@@ -71,7 +73,7 @@ with tf.Session() as sess:
 				print(training_set_name)
 				print(" ")
 				print(training_set_class)
-				imt = plt.imshow(training_set_image[2]/255)
+				# imt = plt.imshow(training_set_image[2]/255)
 
 				print(" Afbeelding uit mijn batch: ")
 				print(filename[2])
