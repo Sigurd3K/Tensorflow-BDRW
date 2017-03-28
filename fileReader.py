@@ -56,6 +56,9 @@ def bias_variable(shape):
 W = weight_variable([6912, 10])
 b = bias_variable([10])
 
+learningRate = tf.placeholder(tf.float32, name="LearningRate")
+
+
 x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
 # x = tf.placeholder(tf.float32, shape=[None, 48, 48, 3], name="Image")
 
@@ -69,6 +72,7 @@ image_class = tf.placeholder(tf.string, name='image_class')
 # image_class_batch = tf.placeholder(dtype=tf.int8, shape=[None, ], name='image_class_batch')
 
 # evaluation_labels = tf.placeholder(tf.float)
+
 
 def labelFileInit(filename_queue, what_set):
 	reader = tf.TextLineReader(skip_header_lines=0)
@@ -87,7 +91,7 @@ def labelFileInit(filename_queue, what_set):
 	return image_name, image_class, filename
 
 
-def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="validation"):
+def labelFileBatchProcessor(batch_size, num_epochs=2, what_set="validation"):
 	if what_set == "training":
 		inputCsv = ["./data/BDRW_train/BDRW_train_1/labels.csv"]
 	elif what_set == "validation":
@@ -102,7 +106,7 @@ def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="validation"):
 	image = build_images(filename)
 
 	image_name_batch, image_class_batch, images, filename = tf.train.shuffle_batch(
-		[image_name, image_class, image, filename], batch_size=50, capacity=capacity,
+		[image_name, image_class, image, filename], batch_size=batch_size, capacity=capacity,
 		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
 
 	print(" END OF FUNCTION LFBP")
@@ -130,12 +134,14 @@ def return_training_set():
 	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
 training_set_name, training_set_class, training_set_image, filenames = return_training_set()
+
+
 def return_eval_set():
-	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(50, 1, "validation")
+	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(800, 1, "validation")
 
 	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
-evaluation_set_name, evaluation_set_class, evaluation_training_set_image, evaluation_filenames = return_eval_set()
+evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = return_eval_set()
 
 # TRAINING STEPS
 

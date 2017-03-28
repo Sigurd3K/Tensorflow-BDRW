@@ -54,41 +54,41 @@ with tf.Session() as sess:
 
 	looper = 0
 
-
-
 	printedTest = False
 
-	# for _ in range(1000):
-	# 	try:
-	# 		while not coord.should_stop():
-	# 			looper += 1
-	# 			print(looper)
-	# 			training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames]) # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-	# 			sess.run(fR.train_step, feed_dict={fR.x: training_set_image, fR.y_: training_set_class})
-	# 			# print(sess.run(accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
-	#
-	# 			if printedTest == False:
-	# 				filename
-	#
-	#
-	# 	except tf.errors.OutOfRangeError:
-	# 		# Bij epoch = 1 in de queue geeft TextLineReader of de queue een outOfRange exception als er geen lines meer over zijn om te readen
-	# 		print(looper)
-	# 		print('%s%s =========== Out of range error =========== %s' % (fg('white'), bg('yellow'), attr('reset')))
-	# 		print('%s%s === Stopped loading of one-hot labels ==== %s' % (fg('white'), bg('yellow'), attr('reset')))
-	# 	finally:
-	# 		coord.request_stop()
+	loopAmount = 500
+	learningRate = 0.05
 
 	# Correcte code
-	for _ in range(10):
+	accuracyArray = [0, 0, 0]
+	for x in range(loopAmount):
 		training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-		sess.run(fR.train_step, feed_dict={fR.x: training_set_image, fR.y_: training_set_class})
-		print(training_set_name[1])
+		sess.run(fR.train_step, feed_dict={fR.x: training_set_image, fR.y_: training_set_class, fR.learningRate: learningRate})
+		if x % 100 == 0:
+			print(str(x) + ": ")
+			print(training_set_name[1])
+			evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filename = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+			accuracy = sess.run(fR.accuracy, feed_dict={fR.x: training_set_image, fR.y_: training_set_class})
+			accuracyArray.append(accuracy)
+			print((accuracy))
+			# print(sess.run(fR.accuracy, feed_dict={fR.x: evaluation_set_image, fR.y_: evaluation_set_class}))
+
+	plt.plot(accuracyArray)
+	plt.ylabel('Juiste voorspellingen, Learing rate: ' + str(learningRate) + ', loops: ' + str(loopAmount))
+	# print(accuracyArray)
+	input("Press Enter to continue...")
+
+	evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+
+	test_accuracy = sess.run(fR.accuracy, feed_dict={
+		fR.x: evaluation_set_image,
+		fR.y_: evaluation_set_class})
+	print('Test accuracy {:g}'.format(test_accuracy))
 
 	# Test trained model
 	# evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filename = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-
-	# print(sess.run(fR.accuracy, feed_dict={x: mnist.test.images, y_: mnist.test.labels}))
+	#
+	# print(sess.run(fR.accuracy, feed_dict={fR.x: evaluation_set_image, fR.y_: evaluation_set_class}))
 
 	coord.request_stop()
 	coord.join(threads)
