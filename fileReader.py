@@ -33,9 +33,28 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
-W = tf.Variable(tf.zeros([6912, 10]), name="Weights")
-# W = tf.Variable(tf.zeros([2304, 10]), name="Weights")
-b = tf.Variable(tf.zeros([10]), name="Biases")
+
+# Gewichten en biasen een random beginvariabele geven.
+
+
+def weight_variable(shape):
+  initial = tf.truncated_normal(shape, stddev=0.1)
+  return tf.Variable(initial, name="Weight")
+
+
+def bias_variable(shape):
+  initial = tf.constant(0.1, shape=shape)
+  return tf.Variable(initial, name="Biases")
+
+
+# W = tf.Variable(tf.zeros([6912, 10]), name="Weights")
+# # W = tf.Variable(tf.zeros([2304, 10]), name="Weights")
+# b = tf.Variable(tf.zeros([10]), name="Biases")
+
+# W = weight_variable([6912, 10]), name="Weights")
+# b = weight_variable([10]), name="Biases")
+W = weight_variable([6912, 10])
+b = bias_variable([10])
 
 x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
 # x = tf.placeholder(tf.float32, shape=[None, 48, 48, 3], name="Image")
