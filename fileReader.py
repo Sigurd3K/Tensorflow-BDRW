@@ -144,7 +144,8 @@ cross_entropy = tf.reduce_mean(
 	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
 )
 
-train_step = tf.train.GradientDescentOptimizer(0.5).minimize(cross_entropy)
+# train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
+train_step = tf.train.AdadeltaOptimizer(learningRate).minimize(cross_entropy)
 
 # Evaluation Steps
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_, 1))
