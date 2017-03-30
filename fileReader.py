@@ -33,11 +33,36 @@ MIN_QUEUE_EXAMPLES= 256
 
 print(LABEL_FILE)
 
-W = tf.Variable(tf.zeros([2304,10]), name="Weights")
-b = tf.Variable(tf.zeros([10]), name="Biases")
 
-x = tf.placeholder(tf.float32, shape=[None, 2304], name="flat_IMG")
-y = tf.matmul(x, W) + b
+# Gewichten en biasen een random beginvariabele geven.
+
+
+def weight_variable(shape):
+  initial = tf.truncated_normal(shape, stddev=0.1)
+  return tf.Variable(initial, name="Weight")
+
+
+def bias_variable(shape):
+  initial = tf.constant(0.1, shape=shape)
+  return tf.Variable(initial, name="Biases")
+
+
+# W = tf.Variable(tf.zeros([6912, 10]), name="Weights")
+# # W = tf.Variable(tf.zeros([2304, 10]), name="Weights")
+# b = tf.Variable(tf.zeros([10]), name="Biases")
+
+# W = weight_variable([6912, 10]), name="Weights")
+# b = weight_variable([10]), name="Biases")
+W = weight_variable([6912, 10])
+b = bias_variable([10])
+
+learningRate = tf.placeholder(tf.float32, name="LearningRate")
+
+
+x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
+# x = tf.placeholder(tf.float32, shape=[None, 48, 48, 3], name="Image")
+
+y = tf.matmul(x, W) + b # Logits
 y_ = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 
 image_name = tf.placeholder(tf.string, name='image_name')
@@ -49,89 +74,86 @@ image_class = tf.placeholder(tf.string, name='image_class')
 # evaluation_labels = tf.placeholder(tf.float)
 
 
-# def filenameLister():
-# 	FILES_TRAINING = tf.train.string_input_producer(
-# 		tf.train.match_filenames_once(TRAINING_DIR + "digit_*.jpg"))
-# 	print("Filedir: %s" % (FILEDIR))
-# 	return FILES_TRAINING
-
-
-def filenameLister2(imageNameBatch):
-	print('%s%s filenameLister2 %s' % (fg('white'), bg('blue'), attr('reset')))
-	FILES_TRAINING = TRAINING_DIR + imageNameBatch + ".jpg"
-	FILES_TRAINING = tf.train.string_input_producer(FILES_TRAINING, name="CSVFilenames")
-	print('%s%s filenameLister2 END %s' % (fg('white'), bg('blue'), attr('reset')))
-	return FILES_TRAINING
-
-
-def labelFileInit(filename_queue):
+def labelFileInit(filename_queue, what_set):
 	reader = tf.TextLineReader(skip_header_lines=0)
 	_, csv_row = reader.read(filename_queue)
 	record_defaults = [['Image1'], [5]]
 	image_name, image_class = tf.decode_csv(csv_row, record_defaults=record_defaults)
 
 	image_class = tf.one_hot(image_class, 10, on_value=1, off_value=0)
+
+	if what_set == "training":
+		filename = [TRAINING_DIR + image_name + ".jpg"]
+	elif what_set == "validation":
+		filename = [VALIDATION_DIR + image_name + ".jpg"]
+
 	print(image_class)
-	return image_name, image_class
+	return image_name, image_class, filename
 
 
-def labelFileBatchProcessor(batch_size, num_epochs=None, what_set="training"):
+def labelFileBatchProcessor(batch_size, num_epochs=2, what_set="validation"):
 	if what_set == "training":
 		inputCsv = ["./data/BDRW_train/BDRW_train_1/labels.csv"]
 	elif what_set == "validation":
 		inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
-	# inputCsv = ["./data/BDRW_train/BDRW_train_2/labels.csv"]
-	labelFile_queue = tf.train.string_input_producer(inputCsv, num_epochs=1, shuffle=False)
-	image_name, image_class = labelFileInit(labelFile_queue)
+	labelFile_queue = tf.train.string_input_producer(inputCsv, shuffle=False)
+
+	image_name, image_class, filename = labelFileInit(labelFile_queue,  what_set=what_set)
 	# print(labelFile_queue)
 	min_after_dequeue = 50
 	capacity = min_after_dequeue + 3 * batch_size
-	image_name_batch, image_class_batch = tf.train.shuffle_batch(
-		[image_name, image_class], batch_size=batch_size, capacity=capacity,
+
+	image = build_images(filename)
+
+	image_name_batch, image_class_batch, images, filename = tf.train.shuffle_batch(
+		[image_name, image_class, image, filename], batch_size=batch_size, capacity=capacity,
 		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
+
 	print(" END OF FUNCTION LFBP")
 
-	return image_name_batch, image_class_batch
+	return image_name_batch, image_class_batch, images, filename
 
 
-image_val_name_batch, image_val_class_batch = labelFileBatchProcessor(50, 1, "validation")
-
-
-# FILES_TRAINING = filenameLister()
-# FILES_VALIDATION = filenameLister()
-# FILES_TRAINING2 = filenameLister2(image_tra_name_batch)
-FILES_VALIDATION2 = filenameLister2(image_val_name_batch)
-
-# labelFile_queue = eval("[\"" + LABEL_FILE + "\"]")
 print("[\"" + LABEL_FILE + "\"]")
-# labelFile_queue = tf.train.string_input_producer(["olympics2016.csv"], num_epochs=1, shuffle=False) // werkt niet met num_epochs=1 erbij. OM SHUFFLE TE KUNNEN GEBRUIKEN MOET JE INIT VAR EN RUN DOEN IN VARS
-# labelFile_queue = tf.train.string_input_producer(["./data/BDRW_train/BDRW_train_2/labels.csv"], shuffle=False)
 
 
 def build_images(files_training):
-	image_reader = tf.WholeFileReader()
-	# FILES_TRAINING2 = filenameLister2(files_training)
-	_, image_file = image_reader.read(files_training)
+	image_file = tf.read_file(files_training[0])
 	image_orig = tf.image.decode_jpeg(image_file)
 	image = tf.image.resize_images(image_orig, [48, 48])
 	image.set_shape((48, 48, 3))
+	image = tf.reshape(image, [-1])
 	num_preprocess_threads = 1
 	min_queue_examples = 256
-	images = tf.train.batch([image], batch_size=BATCH_SIZE, num_threads=NUM_PREPROCESS_THREADS, capacity=BATCH_SIZE, allow_smaller_final_batch=True)
-	return images
+	return image
 
 
 def return_training_set():
-	image_tra_name_batch, image_tra_class_batch = labelFileBatchProcessor(50, 1, "training")
-	# SHA1 Hashes van de afbeeldingen berekenen in een loop en deze misschien zo opzoeken?
-	files_training = filenameLister2(image_tra_name_batch)
+	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(50, 1, "training")
 
-	images2 = build_images(files_training)
-	return image_tra_name_batch, image_tra_class_batch, images2
+	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
-
-training_set_name, training_set_class, training_set_image = return_training_set()
+training_set_name, training_set_class, training_set_image, filenames = return_training_set()
 
 
-# Functie kan niet rechtreeks met een run in sessie worden aangeroepen in Tensorflow dus moet eerst in een var worden gestoken.
-# images = build_images(FILES_TRAINING2)
+def return_eval_set():
+	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(800, 1, "validation")
+
+	return image_tra_name_batch, image_tra_class_batch, images, imagepath
+
+evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = return_eval_set()
+
+# TRAINING STEPS
+
+# Loss
+cross_entropy = tf.reduce_mean(
+	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
+)
+
+# train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
+train_step = tf.train.AdadeltaOptimizer(learningRate).minimize(cross_entropy)
+
+# Evaluation Steps
+correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_, 1))
+accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+
