@@ -32,7 +32,7 @@ with tf.Session() as sess:
 			print(str(x) + ": ")
 			print(training_set_name[1])
 			evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filename = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-			accuracy = sess.run(fR.accuracy, feed_dict={fR.x: training_set_image, fR.y_: training_set_class})
+			accuracy = sess.run(fR.accuracy, feed_dict={fR.x: training_set_image, fR.y_: training_set_class, fR.keep_prob: 1.0})
 			accuracyArray.append(accuracy)
 			print((accuracy))
 			# print(sess.run(fR.accuracy, feed_dict={fR.x: evaluation_set_image, fR.y_: evaluation_set_class}))
@@ -48,7 +48,9 @@ with tf.Session() as sess:
 
 	test_accuracy = sess.run(fR.accuracy, feed_dict={
 		fR.x: evaluation_set_image,
-		fR.y_: evaluation_set_class})
+		fR.y_: evaluation_set_class,
+		fR.keep_prob: 1.0
+	})
 	print('Test accuracy {:g}'.format(test_accuracy))
 
 	coord.request_stop()
