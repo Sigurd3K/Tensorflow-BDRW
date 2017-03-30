@@ -143,11 +143,59 @@ def return_eval_set():
 
 evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = return_eval_set()
 
+# =============================================
+
+# Convolutions ding
+def conv2d(x, W):
+  return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
+
+def max_pool_2x2(x):
+  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+
+
+# Convolutions
+
+# x_image =tf.reshape(x, [-1,48,48,1])
+
+image = tf.reshape(x, [-1, 48, 48, 3])
+
+# First Convolutional Layer:
+W_conv1 = weight_variable([5, 5, 3, 32])
+b_conv1 = bias_variable([32])
+
+h_conv1 = tf.nn.relu(conv2d(image, W_conv1) + b_conv1)
+h_pool1 = max_pool_2x2(h_conv1) # 24x24
+
+# Second Convolutional Layer:
+W_conv2 = weight_variable([5, 5, 32, 64])
+b_conv2 = bias_variable([64])
+
+h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)
+h_pool2 = max_pool_2x2(h_conv2) #12x12
+
+# Densely Connected Layer:
+W_fc1 = weight_variable([12 * 12 * 64, 1024])
+b_fc1 = bias_variable([1024])
+
+h_pool2_flat = tf.reshape(h_pool2, [-1, 12*12*64])
+h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
+
+# Dropout Layer:
+# keep_prob = tf.placeholder(tf.float32)
+# h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+
+# Readout Layer:
+W_fc2 = weight_variable([1024, 10])
+b_fc2 = bias_variable([10])
+y_conv = tf.matmul(h_fc1, W_fc2) + b_fc2
+
+# =================================================
+
 # TRAINING STEPS
 
 # Loss
 cross_entropy = tf.reduce_mean(
-	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)
+	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv)
 )
 
 # train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
@@ -156,4 +204,3 @@ train_step = tf.train.AdadeltaOptimizer(learningRate).minimize(cross_entropy)
 # Evaluation Steps
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_, 1))
 accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-
