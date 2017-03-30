@@ -1,18 +1,3 @@
-#  STAGES
-
-"""Stages:
-List of filenames
-File name shuffling (optional)
-Epoch limit (optional)
-FIlename queue
-File format reader
-A decoder for a record format read by the reader
-Preprocessing (optional)
-Example queue
-"""
-
-# https://gist.github.com/eerwitt/518b0c9564e500b4b50f
-
 import tensorflow as tf
 import numpy as np
 from colored import fg, bg, attr
@@ -87,7 +72,6 @@ def labelFileInit(filename_queue, what_set):
 	elif what_set == "validation":
 		filename = [VALIDATION_DIR + image_name + ".jpg"]
 
-	print(image_class)
 	return image_name, image_class, filename
 
 
@@ -99,7 +83,6 @@ def labelFileBatchProcessor(batch_size, num_epochs=2, what_set="validation"):
 	labelFile_queue = tf.train.string_input_producer(inputCsv, shuffle=False)
 
 	image_name, image_class, filename = labelFileInit(labelFile_queue,  what_set=what_set)
-	# print(labelFile_queue)
 	min_after_dequeue = 50
 	capacity = min_after_dequeue + 3 * batch_size
 
@@ -108,8 +91,6 @@ def labelFileBatchProcessor(batch_size, num_epochs=2, what_set="validation"):
 	image_name_batch, image_class_batch, images, filename = tf.train.shuffle_batch(
 		[image_name, image_class, image, filename], batch_size=batch_size, capacity=capacity,
 		min_after_dequeue=min_after_dequeue, allow_smaller_final_batch=True)
-
-	print(" END OF FUNCTION LFBP")
 
 	return image_name_batch, image_class_batch, images, filename
 
