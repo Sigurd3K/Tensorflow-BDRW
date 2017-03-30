@@ -56,15 +56,16 @@ with tf.Session() as sess:
 
 	printedTest = False
 
-	loopAmount = 1000
-	learningRate = 0.05
+	loopAmount = 2000
+	learningRate = 0.5
+	keepProb = 1.0
 
 	# Correcte code
 	accuracyArray = [0, 0, 0]
 	for x in range(loopAmount):
 		training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-		sess.run(fR.train_step, feed_dict={fR.x: training_set_image, fR.y_: training_set_class, fR.learningRate: learningRate})
-		if x % 2 == 0:
+		sess.run(fR.train_step, feed_dict={fR.x: training_set_image, fR.y_: training_set_class, fR.learningRate: learningRate, fR.keep_prob: keepProb})
+		if x % 100 == 0:
 			print(str(x) + ": ")
 			print(training_set_name[1])
 			evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filename = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
