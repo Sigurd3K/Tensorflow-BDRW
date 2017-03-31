@@ -118,7 +118,7 @@ training_set_name, training_set_class, training_set_image, filenames = return_tr
 
 
 def return_eval_set():
-	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(800, 1, "validation")
+	image_tra_name_batch, image_tra_class_batch, images, imagepath = labelFileBatchProcessor(100, 1, "validation")
 
 	return image_tra_name_batch, image_tra_class_batch, images, imagepath
 
