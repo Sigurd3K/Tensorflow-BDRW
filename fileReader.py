@@ -180,7 +180,7 @@ cross_entropy = tf.reduce_mean(
 )
 
 # train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
-train_step = tf.train.AdadeltaOptimizer(learningRate).minimize(cross_entropy)
+train_step = tf.train.AdamOptimizer(learningRate).minimize(cross_entropy)
 
 # Evaluation Steps
 correct_prediction = tf.equal(tf.argmax(y,1), tf.argmax(y_, 1))
