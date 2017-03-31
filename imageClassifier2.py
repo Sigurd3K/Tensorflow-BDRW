@@ -42,7 +42,8 @@ with tf.Session() as sess:
 			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('green'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 
 	plt.plot(accuracyArray)
-	plt.ylabel('Juiste voorspellingen, Learing rate: ' + str(learningRate) + ', loops: ' + str(loopAmount) + "Dropout KeepProb rate: " + str(keepProb))
+	plt.title('Juiste voorspellingen')
+	plt.ylabel('Learning rate: ' + str(learningRate) + ', loops: ' + str(loopAmount) + ", Dropout KeepProb rate: " + str(keepProb))
 	# print(accuracyArray)
 	input("Press Enter to continue...")
 
