@@ -99,9 +99,12 @@ print("[\"" + LABEL_FILE + "\"]")
 
 
 def build_images(files_training):
+	rotation = tf.random_normal([1], mean=0.0, stddev=0.4, dtype=tf.float32, seed=None, name=None)
+
 	image_file = tf.read_file(files_training[0])
 	image_orig = tf.image.decode_jpeg(image_file)
 	image = tf.image.resize_images(image_orig, [48, 48])
+	image = tf.contrib.image.rotate(image, rotation)
 	image.set_shape((48, 48, 3))
 	image = tf.reshape(image, [-1])
 	num_preprocess_threads = 1
