@@ -19,9 +19,9 @@ with tf.Session() as sess:
 
 	printedTest = False
 
-	loopAmount = 5000
-	learningRate = 0.01
-	keepProb = 0.9
+	loopAmount = 2000
+	learningRate = 0.0005
+	keepProb = 0.5
 
 	# Correcte code
 	accuracyArray = [0, 0, 0]
