@@ -39,7 +39,7 @@ with tf.Session() as sess:
 			print((accuracy))
 			# print(sess.run(fR.accuracy, feed_dict={fR.x: evaluation_set_image, fR.y_: evaluation_set_class}))
 		if x % 1000 == 0:
-			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('green'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
+			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 
 	plt.plot(accuracyArray)
 	plt.title('Juiste voorspellingen')
