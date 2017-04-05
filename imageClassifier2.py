@@ -21,7 +21,7 @@ with tf.Session() as sess:
 
 	loopAmount = 2000
 	learningRate = 0.0005
-	keepProb = 0.5
+	keepProb = 0.9
 
 	# Correcte code
 	accuracyArray = [0, 0, 0]
