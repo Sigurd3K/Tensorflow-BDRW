@@ -140,11 +140,15 @@ def max_pool_2x2(x):
 
 image = tf.reshape(x, [-1, 48, 48, 3])
 
+# Dropout Layer1:
+keep_prob1 = tf.placeholder(tf.float32)
+image_drop1 = tf.nn.dropout(image, keep_prob1)
+
 # First Convolutional Layer:
 W_conv1 = weight_variable([8, 8, 3, 32])
 b_conv1 = bias_variable([32])
 
-h_conv1 = tf.nn.relu(conv2d(image, W_conv1) + b_conv1)
+h_conv1 = tf.nn.relu(conv2d(image_drop1, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1) # 24x24
 
 # Second Convolutional Layer:
@@ -162,13 +166,13 @@ h_pool2_flat = tf.reshape(h_pool2, [-1, 12*12*64])
 h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)
 
 # Dropout Layer:
-keep_prob = tf.placeholder(tf.float32)
-h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+keep_prob2 = tf.placeholder(tf.float32)
+h_fc1_drop2 = tf.nn.dropout(h_fc1, keep_prob2)
 
 # Readout Layer:
 W_fc2 = weight_variable([1024, 10])
 b_fc2 = bias_variable([10])
-y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
+y_conv = tf.matmul(h_fc1_drop2, W_fc2) + b_fc2
 
 # =================================================
 
