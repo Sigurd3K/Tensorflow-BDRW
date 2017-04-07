@@ -151,7 +151,6 @@ b_conv1 = bias_variable([32])
 h_conv1 = tf.nn.relu(conv2d(image_drop1, W_conv1) + b_conv1)
 h_pool1 = max_pool_2x2(h_conv1) # 24x24
 
-
 # Second Convolutional Layer:
 W_conv2 = weight_variable([8, 8, 32, 64])
 b_conv2 = bias_variable([64])
