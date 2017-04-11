@@ -76,7 +76,7 @@ with sess.as_default():
 		if x % 100 == 0:
 			# print(training_set_name[1])
 			evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filename = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-			accuracy = sess.run(accuracy_value, feed_dict={img: evaluation_set_image, labels: evaluation_set_class})
+			accuracy = sess.run(accuracy_value, feed_dict={img: evaluation_set_image, labels: evaluation_set_class,  K.learning_phase():0})
 			evaluation_set_image /= 255
 			accuracyArray.append(accuracy)
 			print(str(x) + ": " + str(accuracy))
