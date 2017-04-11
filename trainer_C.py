@@ -68,7 +68,6 @@ with sess.as_default():
 
 	loopAmount = 2000
 
-	# Correcte code
 	accuracyArray = [0, 0, 0]
 	for x in range(loopAmount):
 		training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
@@ -84,21 +83,9 @@ with sess.as_default():
 		if x % 1000 == 0:
 			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 
-	# plt.plot(accuracyArray)
-	# plt.title('Juiste voorspellingen')
-	# plt.ylabel('Learning rate: ' + str(learningRate) + ', loops: ' + str(loopAmount) + ", Dropout KeepProb rate: " + str(keepProb1))
-	# print(accuracyArray)
 	input("Press Enter to continue...")
 
 	evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-
-	# test_accuracy = sess.run(fR.accuracy, feed_dict={
-	# 	fR.x: evaluation_set_image,
-	# 	fR.y_: evaluation_set_class,
-	# 	fR.keep_prob1: 1.0,
-	# 	fR.keep_prob1: 2.0
-	# })
-	# print('Test accuracy {:g}'.format(test_accuracy))
 
 	coord.request_stop()
 	coord.join(threads)
