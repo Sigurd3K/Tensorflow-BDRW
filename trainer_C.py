@@ -34,7 +34,8 @@ x = Dense(1000, activation='relu',  kernel_initializer='random_uniform',bias_ini
 preds = Dense(10, activation='softmax')(x)
 
 loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
-train_step = tf.train.GradientDescentOptimizer(0.5).minimize(loss)
+# loss = categorical_crossentropy(labels, preds)
+train_step = tf.train.AdamOptimizer(0.00005).minimize(loss)
 
 """Calculate Accuracy"""
 accuracy_value = accuracy2(img, labels)
