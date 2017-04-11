@@ -33,6 +33,8 @@ x = Flatten()(x)
 x = Dense(1000, activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
 preds = Dense(10, activation='softmax')(x)
 
+labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
+
 loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
 # loss = categorical_crossentropy(labels, preds)
 train_step = tf.train.AdamOptimizer(0.00005).minimize(loss)
