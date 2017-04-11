@@ -10,9 +10,12 @@ import fileReader as fR
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+sess = tf.Session()
 from keras import backend as K
 from keras.layers import Dense
 from keras.objectives import categorical_crossentropy
+
+K.set_session(sess)
 from keras.metrics import categorical_accuracy as accuracy2
 
 img = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
@@ -35,8 +38,8 @@ accuracy_value = accuracy2(img, labels)
 
 """Start of Tensorflow Session"""
 
-with tf.Session() as sess:
-	K.set_session(sess)
+with sess.as_default():
+	# K.set_session(sess)
 
 	tf.global_variables_initializer().run()
 	tf.local_variables_initializer().run()
