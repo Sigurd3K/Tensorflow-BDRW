@@ -12,19 +12,25 @@ import matplotlib.image as mpimg
 
 sess = tf.Session()
 from keras import backend as K
-from keras.layers import Dense
-from keras.objectives import categorical_crossentropy
 
 K.set_session(sess)
+from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout
 from keras.metrics import categorical_accuracy as accuracy2
 
 img = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
-labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
+
 
 """Keras layers"""
 
-x = Dense(128, activation='relu')(img)
-x = Dense(128, activation='relu')(x)
+x = Dense(6912, activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(img)
+x = Dropout(0.20)(x)
+x = Reshape((48, 48, 3))(x)
+x = Conv2D(32, (3,3), activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
+x = Conv2D(64, (3,3), activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
+x = Conv2D(32, (3,3), activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
+x = Dropout(0.3)(x)
+x = Flatten()(x)
+x = Dense(1000, activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
 preds = Dense(10, activation='softmax')(x)
 
 loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
