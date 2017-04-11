@@ -55,7 +55,6 @@ with sess.as_default():
 	tf.global_variables_initializer().run()
 	tf.local_variables_initializer().run()
 
-
 	writer = tf.summary.FileWriter("./logs")
 	writer.add_graph(sess.graph)
 
@@ -66,18 +65,19 @@ with sess.as_default():
 
 	printedTest = False
 
-	loopAmount = 2000
+	loopAmount = 5000
 
 	accuracyArray = [0, 0, 0]
 	for x in range(loopAmount):
 		training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-		sess.run(train_step, feed_dict={img: training_set_image, labels: training_set_class})
 		training_set_image /= 255
+		# print(training_set_image[0])
+		sess.run(train_step, feed_dict={img: training_set_image, labels: training_set_class, K.learning_phase():1})
 		if x % 100 == 0:
 			# print(training_set_name[1])
 			evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filename = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-			accuracy = sess.run(accuracy_value, feed_dict={img: evaluation_set_image, labels: evaluation_set_class,  K.learning_phase():0})
 			evaluation_set_image /= 255
+			accuracy = sess.run(accuracy_value, feed_dict={img: evaluation_set_image, labels: evaluation_set_class,  K.learning_phase():0})
 			accuracyArray.append(accuracy)
 			print(str(x) + ": " + str(accuracy))
 		if x % 1000 == 0:
