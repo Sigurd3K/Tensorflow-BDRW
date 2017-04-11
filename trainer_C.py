@@ -38,8 +38,8 @@ loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
 train_step = tf.train.AdamOptimizer(0.00005).minimize(loss)
 
 """Calculate Accuracy"""
-accuracy_value = accuracy2(img, labels)
-# accuracy_value = tf.reduce_mean(tf.cast(accuracy_value2, tf.float32))
+accuracy_value = accuracy2(labels, preds)
+accuracy_value = tf.reduce_mean(tf.cast(accuracy_value, tf.float32))
 
 # score = preds.evaluate(img, labels, verbose=0)
 
