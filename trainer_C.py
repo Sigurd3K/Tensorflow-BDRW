@@ -35,6 +35,8 @@ preds = Dense(10, activation='softmax')(x)
 
 labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 
+from keras.objectives import categorical_crossentropy
+
 loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
 # loss = categorical_crossentropy(labels, preds)
 train_step = tf.train.AdamOptimizer(0.00005).minimize(loss)
