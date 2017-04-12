@@ -2,4 +2,4 @@
 
 Tensorflow and keras
 
-Trainer_* works with Keras.
+The trainer_*.py scripts work with Keras.
