@@ -1,6 +1,5 @@
 ## TensorflowTest
 
-Some inspiration from:
+Tensorflow and keras
 
-* https://gist.github.com/eerwitt/518b0c9564e500b4b50f
-
+Trainer_* works with Keras.
