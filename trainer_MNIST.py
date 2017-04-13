@@ -10,6 +10,10 @@ import fileReader as fR
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+sess = tf.Session()
+from keras import backend as K
+
+K.set_session(sess)
 with sess.as_default():
 
 	tf.global_variables_initializer().run()
