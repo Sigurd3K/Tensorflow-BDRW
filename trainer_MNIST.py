@@ -68,9 +68,38 @@ with sess.as_default():
 
 	printedTest = False
 
+	loopAmount = 20000
+	TestImages = mnist.test.images
+	TestLabels = mnist.test.labels
+	TestImages /= 255
+
+	TestImgLen = len(TestImages)
+	TestBatchSize = 100
+
+	accuracyArray = []
 	for x in range(loopAmount):
+		batch = mnist.train.next_batch(50)
+		# training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
+		imageBatch = list(batch)
+		imageBatch[0] /= 255
+		imageBatch = tuple(imageBatch)
+		# print(training_set_image[0])
+		sess.run(train_step, feed_dict={img: batch[0], labels: batch[1], K.learning_phase():1})
+		if x % 100 == 0:
+			for amount in (range(0,TestImgLen,TestBatchSize)):
+				# print(amount)
+				start = amount
+				end = amount + TestBatchSize
+				accuracy = sess.run(accuracy_value, feed_dict={img: TestImages[start:end], labels: TestLabels[start:end], K.learning_phase():0})
+				accuracyArray.append(accuracy)
+			meanAccuracy = np.mean(accuracyArray)
+			print(str(x) + ": " + str(meanAccuracy))
+		if x % 1000 == 0:
+			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
+
 	input("Press Enter to continue...")
 
+	evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 
 	coord.request_stop()
 	coord.join(threads)
