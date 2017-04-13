@@ -94,8 +94,12 @@ with sess.as_default():
 				end = amount + TestBatchSize
 				accuracy = sess.run(accuracy_value, feed_dict={img: TestImages[start:end], labels: TestLabels[start:end], K.learning_phase():0})
 				accuracyArray.append(accuracy)
-			meanAccuracy = np.mean(accuracyArray)
-			print(str(x) + ": " + str(meanAccuracy))
+			meanAccuracy.append(np.mean(accuracyArray))
+			print(str(x) + ": " + str(meanAccuracy[-1:]))
+			if len(meanAccuracy) > 10 and x%1000 == 0:
+				if (mean(meanAccuracy[-4:]) - mean(meanAccuracy[-8:-4])) <=0.01:
+					LearningRate *= 0.9
+					print("LearningRate is now " + str(LearningRate))
 		if x % 1000 == 0:
 			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 
