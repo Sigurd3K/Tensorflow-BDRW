@@ -22,7 +22,6 @@ img = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
 
 """Keras layers"""
 
-# x = Dense(6912, activation='relu')(img)
 x = Reshape((48, 48, 3))(img)
 x = Conv2D(32, (3,3), activation='relu')(x)
 x = Conv2D(64, (3,3), activation='relu')(x)
