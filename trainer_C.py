@@ -40,6 +40,8 @@ from keras.objectives import categorical_crossentropy
 loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
 # loss = categorical_crossentropy(labels, preds)
 train_step = tf.train.AdamOptimizer(0.00005).minimize(loss)
+	# Bij AdamOptimizer is een zeer kleine learning rate gebruikelijk
+	# AdamOptimizer gaat zijn learningRate zelf aanpassen dus dit zelf doen is niet echt nodig
 
 """Calculate Accuracy"""
 accuracy_value = accuracy2(labels, preds)

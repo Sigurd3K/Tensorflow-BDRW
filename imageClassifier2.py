@@ -21,6 +21,8 @@ with tf.Session() as sess:
 
 	loopAmount = 2000
 	learningRate = 0.0005
+		# Bij AdamOptimizer is een zeer kleine learning rate gebruikelijk
+		# AdamOptimizer gaat zijn learningRate zelf aanpassen dus dit zelf doen is niet echt nodig
 	keepProb1 = 0.8
 	keepProb2 = 0.8
 
