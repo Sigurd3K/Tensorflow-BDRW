@@ -77,6 +77,7 @@ with sess.as_default():
 
 	TestImgLen = len(TestImages)
 	TestBatchSize = 100
+	meanAccuracy = []
 
 	accuracyArray = []
 	for x in range(loopAmount):
