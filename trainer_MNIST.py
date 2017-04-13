@@ -41,8 +41,8 @@ labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 from keras.objectives import categorical_crossentropy
 
 loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
-# loss = categorical_crossentropy(labels, preds)
-train_step = tf.train.AdamOptimizer(0.0001).minimize(loss)
+LearningRate = 0.0001
+train_step = tf.train.AdamOptimizer(LearningRate).minimize(loss)
 	# Bij AdamOptimizer is een zeer kleine learning rate gebruikelijk
 	# AdamOptimizer gaat zijn learningRate zelf aanpassen dus dit zelf doen is niet echt nodig
 
