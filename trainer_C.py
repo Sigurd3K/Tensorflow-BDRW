@@ -14,7 +14,7 @@ sess = tf.Session()
 from keras import backend as K
 
 K.set_session(sess)
-from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout
+from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout, MaxPooling2D
 from keras.metrics import categorical_accuracy as accuracy2
 
 img = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
@@ -22,15 +22,15 @@ img = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
 
 """Keras layers"""
 
-x = Dense(6912, activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(img)
-x = Dropout(0.20)(x)
-x = Reshape((48, 48, 3))(x)
-x = Conv2D(32, (3,3), activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
-x = Conv2D(64, (3,3), activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
-x = Conv2D(32, (3,3), activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
-x = Dropout(0.3)(x)
+# x = Dense(6912, activation='relu')(img)
+x = Reshape((48, 48, 3))(img)
+x = Conv2D(32, (3,3), activation='relu')(x)
+x = Conv2D(64, (3,3), activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2))(x)
+x = Dropout(0.25)(x)
 x = Flatten()(x)
-x = Dense(1000, activation='relu',  kernel_initializer='random_uniform',bias_initializer='zeros')(x)
+x = Dense(128, activation='relu')(x)
+x = Dropout(0.5)(x)
 preds = Dense(10, activation='softmax')(x)
 
 labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
