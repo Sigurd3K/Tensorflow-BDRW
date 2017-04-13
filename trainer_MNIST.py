@@ -25,12 +25,12 @@ img = tf.placeholder(tf.float32, shape=[None, 784], name="Image")
 
 """Keras layers"""
 
-x = Dense(784)(img)
-x = Reshape((28, 28, 1))(x)
+# x = Dense(784)(img)
+x = Reshape((28, 28, 1))(img)
 x = Conv2D(32, (3,3), activation='relu')(x)
 x = Conv2D(64, (3,3), activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2))(x)
-x = Dropout(0.20)(x)
+x = Dropout(0.25)(x)
 x = Flatten()(x)
 x = Dense(128, activation='relu')(x)
 x = Dropout(0.5)(x)
