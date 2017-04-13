@@ -81,7 +81,7 @@ with sess.as_default():
 
 	accuracyArray = []
 	for x in range(loopAmount):
-		batch = mnist.train.next_batch(50)
+		batch = mnist.train.next_batch(100)
 		# training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 		imageBatch = list(batch)
 		imageBatch[0] /= 255
