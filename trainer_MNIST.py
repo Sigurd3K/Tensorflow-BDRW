@@ -10,6 +10,9 @@ import fileReader as fR
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 
+from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
+
 sess = tf.Session()
 from keras import backend as K
 
