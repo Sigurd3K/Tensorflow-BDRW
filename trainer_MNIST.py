@@ -17,7 +17,43 @@ sess = tf.Session()
 from keras import backend as K
 
 K.set_session(sess)
+from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout, MaxPooling2D
+from keras.metrics import categorical_accuracy as accuracy2
+
+img = tf.placeholder(tf.float32, shape=[None, 784], name="Image")
+
+
+"""Keras layers"""
+
+x = Dense(784)(img)
+x = Reshape((28, 28, 1))(x)
+x = Conv2D(32, (3,3), activation='relu')(x)
+x = Conv2D(64, (3,3), activation='relu')(x)
+x = MaxPooling2D(pool_size=(2, 2))(x)
+x = Dropout(0.20)(x)
+x = Flatten()(x)
+x = Dense(128, activation='relu')(x)
+x = Dropout(0.5)(x)
+preds = Dense(10, activation='softmax')(x)
+
+labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
+
+from keras.objectives import categorical_crossentropy
+
+loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
+# loss = categorical_crossentropy(labels, preds)
+train_step = tf.train.AdamOptimizer(0.0001).minimize(loss)
+
+"""Calculate Accuracy"""
+accuracy_value = accuracy2(labels, preds)
+accuracy_value = tf.reduce_mean(tf.cast(accuracy_value, tf.float32))
+
+# score = preds.evaluate(img, labels, verbose=0)
+
+"""Start of Tensorflow Session"""
+
 with sess.as_default():
+	# K.set_session(sess)
 
 	tf.global_variables_initializer().run()
 	tf.local_variables_initializer().run()
