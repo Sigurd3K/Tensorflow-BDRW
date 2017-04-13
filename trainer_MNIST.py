@@ -70,7 +70,7 @@ with sess.as_default():
 
 	printedTest = False
 
-	loopAmount = 20000
+	loopAmount = 30000
 	TestImages = mnist.test.images
 	TestLabels = mnist.test.labels
 	# TestImages /= 255
