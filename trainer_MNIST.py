@@ -17,7 +17,8 @@ sess = tf.Session()
 from keras import backend as K
 
 K.set_session(sess)
-from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout, MaxPooling2D
+from keras.models import Model
+from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout, MaxPooling2D, InputLayer, Input
 from keras.metrics import categorical_accuracy as accuracy2
 
 img = tf.placeholder(tf.float32, shape=[None, 784], name="Image")
@@ -25,8 +26,12 @@ img = tf.placeholder(tf.float32, shape=[None, 784], name="Image")
 
 """Keras layers"""
 
+inputs = Input(shape=(784,))
+
 # x = Dense(784)(img)
-x = Reshape((28, 28, 1))(img)
+# x = InputLayer(input_tensor=inputs, input_shape=(None, 784))
+x = Dense(784)(inputs)
+x = Reshape((28, 28, 1))(x)
 x = Conv2D(32, (3,3), activation='relu')(x)
 x = Conv2D(64, (3,3), activation='relu')(x)
 x = MaxPooling2D(pool_size=(2, 2))(x)
@@ -36,14 +41,19 @@ x = Dense(128, activation='relu')(x)
 x = Dropout(0.5)(x)
 preds = Dense(10, activation='softmax')(x)
 
+model = Model(inputs=img, outputs= preds)
+
 labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 
 from keras.objectives import categorical_crossentropy
 
-loss = tf.reduce_mean(categorical_crossentropy(labels, preds))
+loss = tf.reduce_mean(categorical_crossentropy(labels, model.output))
+	# Je kan ook gewoon preds ingeven ipv van model.output maar ik wil alle getrained dingen kunnen opslagen
+
 LearningRate = 0.0001
 train_step = tf.train.AdamOptimizer(LearningRate).minimize(loss)
 	# Bij AdamOptimizer is een zeer kleine learning rate gebruikelijk
+	# Is een optimizer met momentum
 	# AdamOptimizer gaat zijn learningRate zelf aanpassen dus dit zelf doen is niet echt nodig
 
 """Calculate Accuracy"""
