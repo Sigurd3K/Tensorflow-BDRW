@@ -20,6 +20,9 @@ K.set_session(sess)
 from keras.models import Model
 from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout, MaxPooling2D, InputLayer, Input
 from keras.metrics import categorical_accuracy as accuracy2
+from keras.models import load_model
+import os
+
 
 img = tf.placeholder(tf.float32, shape=[None, 784], name="Image")
 
@@ -121,3 +124,12 @@ with sess.as_default():
 
 	coord.request_stop()
 	coord.join(threads)
+
+# Model Saver ------------------------------
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+# serialize weights to HDF5
+model.save_weights("model.h5")
+print("Saved model to disk")
+# -------------------------------------------
