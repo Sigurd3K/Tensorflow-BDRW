@@ -26,7 +26,7 @@ img = tf.placeholder(tf.float32, shape=[None, 784], name="Image")
 
 """Keras layers"""
 
-inputs = Input(shape=(784,))
+inputs = Input(tensor=img)
 
 # x = Dense(784)(img)
 # x = InputLayer(input_tensor=inputs, input_shape=(None, 784))
