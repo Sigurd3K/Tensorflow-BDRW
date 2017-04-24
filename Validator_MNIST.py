@@ -3,6 +3,7 @@ Full Tensorflow code with keras to manage layers
 https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html
 """
 
+import numpy as np
 import tensorflow as tf
 import math
 from colored import fg, bg, attr
@@ -22,6 +23,7 @@ from keras.layers import Dense, Conv2D, Reshape, Flatten, Dropout, MaxPooling2D,
 from keras.metrics import categorical_accuracy as accuracy2
 from keras.models import load_model
 from keras.models import model_from_json
+
 import os
 
 
@@ -32,27 +34,34 @@ labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 ##################################
 # ---- LOAD MODEL AND WEIGHTS --##
 
-json_file = open('model.json', 'r')
-loaded_model_json = json_file.read()
-json_file.close()
-loaded_model = model_from_json(loaded_model_json)
+# json_file = open('model.json', 'r')
+# loaded_model_json = json_file.read()
+# json_file.close()
+# loaded_model = model_from_json(loaded_model_json)
+loaded_model = load_model('model.h5')
+
+
+## evaluate loaded model on test data
+loaded_model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
 # load weights into new model
 loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
 
-# evaluate loaded model on test data
-loaded_model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-# score = tf.container(loaded_model.evaluate(img, labels, batch_size = 50))
+from keras.objectives import categorical_crossentropy
+loss = tf.reduce_mean(loaded_model.output)
 
-
+#
 def scoreFunc(img, labels):
+	print(type(img))
+	print(type(labels))
 	# evaluational = loaded_model.evaluate(img, labels, batch_size = 50)
-	# evaluational = [1]*100
-	evaluational = 2.54
+	# return np.mean(xx[1:3])
+	# return loaded_model.evaluate(img, labels, batch_size = 50)
+	return np.random.rand(10)
 
-	return tf.cast(evaluational, tf.float32)
-
-score = tf.py_func(scoreFunc, [img, labels], [tf.float32])
+#
+score = tf.py_func(scoreFunc, [img, labels], tf.float64)
 
 # print("%s: %.2f%%" % (loaded_model.metrics_names[1], score[1]*100))
 
@@ -78,8 +87,27 @@ with sess.as_default():
 	coord = tf.train.Coordinator()
 	threads = tf.train.start_queue_runners(coord=coord)
 
-	batch = mnist.train.next_batch(50)
-	score2 = sess.run(score, feed_dict={img: batch[0], labels: batch[1], K.learning_phase():0})
+	batch = mnist.train.next_batch(500)
+	# score2 = sess.run(score, feed_dict={img: batch[0], labels: batch[1]})
+	# evaluational = loaded_model.evaluate(batch[0], batch[1], batch_size = 50)
+	predictions = loaded_model.predict(batch[0])
+		# Predict classes is voor de sequential niet voor de functional API
+	predictions = loaded_model.evaluate(batch[0], batch[1], verbose=0)
+	print("%s: %.2f%%" % (loaded_model.metrics_names[1], predictions[1]*100))
+	# preds2 = np.argmax(predictions, axis=1)
+	# print(length(batch[]))
+	# print(preds2)
+	# print(len(preds2))
+	# print(batch[1])
+	# print(np.argmax(predictions, axis=1))
+	# print(predictions)
+
+	# print(evaluational[0])
+	# print(evaluational[1])
+	# print(size(evaluational))
+	# print(score2)
+	# score2 = sess.run(score, feed_dict={img: batch[0], labels: batch[1], K.learning_phase():0})
+
 	# print("%s: %.2f%%" % (loaded_model.metrics_names[1], score2[1]*100))
 
 	coord.request_stop()
