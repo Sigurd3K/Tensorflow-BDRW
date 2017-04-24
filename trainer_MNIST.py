@@ -126,10 +126,15 @@ with sess.as_default():
 	coord.join(threads)
 
 # Model Saver ------------------------------
+
+K.set_learning_phase(0)
+
+model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
 model_json = model.to_json()
 with open("model.json", "w") as json_file:
     json_file.write(model_json)
 # serialize weights to HDF5
-model.save_weights("model.h5")
+model.save("model.h5")
 print("Saved model to disk")
 # -------------------------------------------
