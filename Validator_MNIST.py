@@ -112,3 +112,5 @@ with sess.as_default():
 
 	coord.request_stop()
 	coord.join(threads)
+
+# Laatste stuk proberen: https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html

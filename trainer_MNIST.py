@@ -138,3 +138,4 @@ with open("model.json", "w") as json_file:
 model.save("model.h5")
 print("Saved model to disk")
 # -------------------------------------------
+# # Laatste stuk proberen: https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html
