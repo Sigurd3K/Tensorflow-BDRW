@@ -84,7 +84,9 @@ batch = []
 
 with sess.as_default():
 	# K.set_session(sess)
+	saver = tf.train.Saver()
 
+	saver.restore(sess, "tmp/model.ckpt")
 	tf.global_variables_initializer().run()
 	tf.local_variables_initializer().run()
 
@@ -97,7 +99,7 @@ with sess.as_default():
 
 	batch = mnist.train.next_batch(100)
 
-	loaded_model.load_weights("modelWeights.h5")
+	# loaded_model.load_weights("modelWeights.h5")
 	sess.run(c, feed_dict={K.learning_phase():0})
 	# score2 = sess.run(score, feed_dict={img: batch[0], labels: batch[1]})
 	# evaluational = loaded_model.evaluate(batch[0], batch[1], batch_size = 50)
