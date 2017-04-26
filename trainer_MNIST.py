@@ -109,10 +109,6 @@ with sess.as_default():
 	for x in range(loopAmount):
 		batch = mnist.train.next_batch(100)
 		# training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
-		imageBatch = list(batch)
-		# imageBatch[0] /= 255
-		# MNIST IS AL GEDEELD DOOR 255
-		imageBatch = tuple(imageBatch)
 		# print(training_set_image[0])
 		sess.run(train_step, feed_dict={img: batch[0], labels: batch[1], K.learning_phase():1})
 		if x % 100 == 0:
