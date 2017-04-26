@@ -81,7 +81,6 @@ def ModelSaver():
 """Start of Tensorflow Session"""
 
 with sess.as_default():
-	# K.set_session(sess)
 
 	tf.global_variables_initializer().run()
 	tf.local_variables_initializer().run()
@@ -99,7 +98,6 @@ with sess.as_default():
 	loopAmount = 60000
 	TestImages = mnist.test.images
 	TestLabels = mnist.test.labels
-	# TestImages /= 255
 
 	TestImgLen = len(TestImages)
 	TestBatchSize = 100
@@ -127,8 +125,6 @@ with sess.as_default():
 		if x % 1000 == 0:
 			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 	input("Press Enter to continue...")
-	accuracy = sess.run(accuracy_value, feed_dict={img: TestImages[start:end], labels: TestLabels[start:end], K.learning_phase():1})
-	ModelSaver()
 
 	# evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 
