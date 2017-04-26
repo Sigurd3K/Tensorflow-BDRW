@@ -65,6 +65,19 @@ accuracy_value = tf.reduce_mean(tf.cast(accuracy_value, tf.float32))
 
 # score = preds.evaluate(img, labels, verbose=0)
 
+# Model Saver ------------------------------
+
+def ModelSaver():
+	K.set_learning_phase(0)
+
+	model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
+
+	# Model to HDF5
+	model.save("model.h5", overwrite=True)
+	model.save_weights("modelWeights.h5", overwrite=True)
+	print("Saved model to disk")
+# -------------------------------------------
+
 """Start of Tensorflow Session"""
 
 with sess.as_default():
@@ -83,7 +96,7 @@ with sess.as_default():
 
 	printedTest = False
 
-	loopAmount = 30000
+	loopAmount = 60000
 	TestImages = mnist.test.images
 	TestLabels = mnist.test.labels
 	# TestImages /= 255
@@ -117,25 +130,12 @@ with sess.as_default():
 					print("LearningRate is now " + str(LearningRate))
 		if x % 1000 == 0:
 			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
-
 	input("Press Enter to continue...")
+	accuracy = sess.run(accuracy_value, feed_dict={img: TestImages[start:end], labels: TestLabels[start:end], K.learning_phase():1})
+	ModelSaver()
 
 	# evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 
 	coord.request_stop()
 	coord.join(threads)
-
-# Model Saver ------------------------------
-
-K.set_learning_phase(0)
-
-model.compile(loss='categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-
-model_json = model.to_json()
-with open("model.json", "w") as json_file:
-    json_file.write(model_json)
-# serialize weights to HDF5
-model.save("model.h5")
-print("Saved model to disk")
-# -------------------------------------------
 # # Laatste stuk proberen: https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html
