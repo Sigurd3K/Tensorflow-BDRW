@@ -1,6 +1,8 @@
 """
 Full Tensorflow code with keras to manage layers
 https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html
+
+https://github.com/GINK03/KindleReferencedIndexScore/blob/debdc8e0b68459b0d6870a52e5f6ac58ee1c1d25/keras-text-classification/model.py
 """
 
 import tensorflow as tf
@@ -110,14 +112,13 @@ with sess.as_default():
 		# print(training_set_image[0])
 		sess.run(train_step, feed_dict={img: batch[0], labels: batch[1], K.learning_phase():1})
 		if x % 100 == 0:
-			for amount in (range(0,TestImgLen,TestBatchSize)):
-				# print(amount)
+			for amount in (range(0,TestImgLen,TestBatchSize)): # Evaluate accuracy on whole MNIST_Test_images set.
 				start = amount
 				end = amount + TestBatchSize
 				accuracy = sess.run(accuracy_value, feed_dict={img: TestImages[start:end], labels: TestLabels[start:end], K.learning_phase():0})
 				accuracyArray.append(accuracy)
-			meanAccuracy.append(np.mean(accuracyArray))
-			print(str(x) + ": " + str(meanAccuracy[-1:]))
+			meanAccuracy.append(np.mean(accuracyArray)) # The mean accuracy (Accuracy on the whole batch
+			print(str(x) + ": " + str(meanAccuracy[-1:])) # Print the mean accuracy (Accuracy on the whole batch and the previous one)
 			if len(meanAccuracy) > 10 and x%1000 == 0:
 				if (mean(meanAccuracy[-4:]) - mean(meanAccuracy[-8:-4])) <=0.01:
 					LearningRate *= 0.9
