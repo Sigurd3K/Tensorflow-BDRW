@@ -126,6 +126,11 @@ with sess.as_default():
 		if x % 1000 == 0:
 			print('%s%s ======= Iteration %s of %s | %s done ======= %s' % (fg('white'), bg('red'), str(x), str(loopAmount), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 	input("Press Enter to continue...")
+	# ModelSaver()
+
+	saver = tf.train.Saver()
+	save_path = saver.save(sess, "tmp/model.ckpt")
+	print("Model saved in file: %s" % save_path)
 
 	# evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = sess.run([fR.evaluation_set_name, fR.evaluation_set_class, fR.evaluation_set_image, fR.evaluation_filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
 
