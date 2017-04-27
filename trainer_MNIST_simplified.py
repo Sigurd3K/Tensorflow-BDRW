@@ -61,7 +61,7 @@ with sess.as_default():
 
 	looper = 0
 
-	loopAmount = 5000
+	loopAmount = 1000
 	TestImages = mnist.test.images
 	TestLabels = mnist.test.labels
 
@@ -85,9 +85,9 @@ with sess.as_default():
 			print('%s%s ======= %s done ======= %s' % (fg('white'), bg('red'), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
 	input("Press Enter to continue...")
 
-	saver = tf.train.Saver()
-	save_path = saver.save(sess, "tmp/model.ckpt")
-	print("Model saved in file: %s" % save_path)
-
 	coord.request_stop()
 	coord.join(threads)
+
+saver = tf.train.Saver()
+save_path = saver.save(sess, "tmp/model.ckpt")
+print("Model saved in file: %s" % save_path)
