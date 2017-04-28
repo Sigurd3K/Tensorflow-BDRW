@@ -166,8 +166,8 @@ W_fc2 = weight_variable([1024, 10])
 b_fc2 = bias_variable([10])
 y_conv = tf.matmul(h_fc1_drop2, W_fc2) + b_fc2
 
-# =================================================
 
+# =================================================
 # TRAINING STEPS
 
 # Loss
@@ -175,8 +175,8 @@ cross_entropy = tf.reduce_mean(
 	tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y_conv)
 )
 
-# train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy)
-train_step = tf.train.AdamOptimizer(learningRate).minimize(cross_entropy)
+# train_step = tf.train.GradientDescentOptimizer(0.2).minimize(cross_entropy) # AdamOptimizer heeft een adaptive learningRate en is iets geavanceerder
+train_step = tf.train.AdamOptimizer(learningRate).minimize(cross_entropy) # Adam optimizer heeft een zeer kleine "learningRate" nodig
 
 # Evaluation Steps
 correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_, 1))
