@@ -24,16 +24,17 @@ def weight_variable(shape):
 	initial = tf.truncated_normal(shape, stddev=0.5)
 	return tf.Variable(initial, name="Weight") # Deze placeholders krijgen een naam, handig voor in de Graph
 
+
 def bias_variable(shape):
-  initial = tf.constant(0.5, shape=shape)
-  return tf.Variable(initial, name="Biases")
+	initial = tf.constant(0.5, shape=shape)
+	return tf.Variable(initial, name="Biases")
+
 
 # De placeholders aanmaken door bovenstaande functies uit te voeren
 W = weight_variable([6912, 10])
 b = bias_variable([10])
 
 learningRate = tf.placeholder(tf.float32, name="LearningRate")
-
 
 x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
 
@@ -115,6 +116,7 @@ def return_eval_set():
 
 evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_filenames = return_eval_set()
 
+
 # =============================================
 
 # Convolutions ding
@@ -122,7 +124,7 @@ def conv2d(x, W):
   return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
 def max_pool_2x2(x):
-  return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+	return tf.nn.max_pool(x, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
 
 
 # Convolutions
