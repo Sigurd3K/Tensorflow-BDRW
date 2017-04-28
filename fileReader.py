@@ -36,6 +36,8 @@ b = bias_variable([10])
 
 learningRate = tf.placeholder(tf.float32, name="LearningRate")
 
+# Alle pixels van de afbeelding achter elkaar, dus hoogte * breedte * r * g * b
+# None zal uiteindelijk even groot zijn als de batch_size, we willen deze nog eenvoudig kunnen aanpassen.
 x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
 
 # In sommige gevallen wil je geen "platte afbeelding", De convolutional layers van Keras hebben bvb 2d input nodig:
@@ -119,7 +121,7 @@ evaluation_set_name, evaluation_set_class, evaluation_set_image, evaluation_file
 
 # =============================================
 
-# Convolutions ding
+# Convolution functies
 def conv2d(x, W):
   return tf.nn.conv2d(x, W, strides=[1, 1, 1, 1], padding='SAME')
 
