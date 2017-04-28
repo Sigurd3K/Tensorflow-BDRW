@@ -1,15 +1,17 @@
 import tensorflow as tf
 import numpy as np
-from colored import fg, bg, attr
+from colored import fg, bg, attr # For coloring Python print() output
 
 
 print(" ")
 print("== fileReader.py ==")
 
+# File locations:
 FILEDIR = './data/BDRW_train'
 TRAINING_DIR= FILEDIR + '/BDRW_train_1/'
 VALIDATION_DIR = FILEDIR + '/BDRW_train_2/'
 LABEL_FILE = FILEDIR + '/BDRW_train_2/labels.csv'
+
 EPOCH_LIMIT = 50
 FILES_VALIDATION = 0
 BATCH_SIZE = 10
@@ -19,25 +21,16 @@ MIN_QUEUE_EXAMPLES= 256
 print(LABEL_FILE)
 
 
-# Gewichten en biasen een random beginvariabele geven.
-
-
+# Gewichten en biasen een random beginvariabele geven. Zo kan je oa. dode neuronen voorkomen en sneller te leren.
 def weight_variable(shape):
-  initial = tf.truncated_normal(shape, stddev=0.5)
-  return tf.Variable(initial, name="Weight")
-
+	initial = tf.truncated_normal(shape, stddev=0.5)
+	return tf.Variable(initial, name="Weight") # Deze placeholders krijgen een naam, handig voor in de Graph
 
 def bias_variable(shape):
   initial = tf.constant(0.5, shape=shape)
   return tf.Variable(initial, name="Biases")
 
-
-# W = tf.Variable(tf.zeros([6912, 10]), name="Weights")
-# # W = tf.Variable(tf.zeros([2304, 10]), name="Weights")
-# b = tf.Variable(tf.zeros([10]), name="Biases")
-
-# W = weight_variable([6912, 10]), name="Weights")
-# b = weight_variable([10]), name="Biases")
+# De placeholders aanmaken door bovenstaande functies uit te voeren
 W = weight_variable([6912, 10])
 b = bias_variable([10])
 
@@ -45,10 +38,12 @@ learningRate = tf.placeholder(tf.float32, name="LearningRate")
 
 
 x = tf.placeholder(tf.float32, shape=[None, 6912], name="Image")
+
+# In sommige gevallen wil je geen "platte afbeelding", De convolutional layers van Keras hebben bvb 2d input nodig:
 # x = tf.placeholder(tf.float32, shape=[None, 48, 48, 3], name="Image")
 
-y = tf.matmul(x, W) + b # Logits
-y_ = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
+y = tf.matmul(x, W) + b # Logits. (Gebruiken in de layers een andere methode)
+y_ = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass") # De correcte klasses, als one_hot
 
 image_name = tf.placeholder(tf.string, name='image_name')
 image_class = tf.placeholder(tf.string, name='image_class')
