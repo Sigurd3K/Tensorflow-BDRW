@@ -1,3 +1,8 @@
+"""
+	Trains de neural network for the MNIST Dataset
+	COMPLETELY FUNCTIONAL
+"""
+
 import tensorflow as tf
 import math
 from colored import fg, bg, attr

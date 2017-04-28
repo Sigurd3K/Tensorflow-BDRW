@@ -1,6 +1,8 @@
 """
 Full Tensorflow code with keras to manage layers
 https://blog.keras.io/keras-as-a-simplified-interface-to-tensorflow-tutorial.html
+
+Working with the BDRW Dataset
 """
 
 import tensorflow as tf

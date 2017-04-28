@@ -1,3 +1,8 @@
+"""
+	Loads the model trained by the MNIST Trainer and runs it to validate
+	COMPLETELY FUNCTIONAL
+"""
+
 import tensorflow as tf
 import math
 from colored import fg, bg, attr

@@ -1,3 +1,5 @@
+"""Testing of the image loader for the BDRW Dataset"""
+
 import tensorflow as tf
 import math
 from colored import fg, bg, attr
