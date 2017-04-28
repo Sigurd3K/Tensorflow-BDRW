@@ -3,8 +3,6 @@ import numpy as np
 from colored import fg, bg, attr # For coloring Python print() output
 
 
-print(" ")
-print("== fileReader.py ==")
 
 # File locations:
 FILEDIR = './data/BDRW_train'
@@ -47,11 +45,6 @@ y_ = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass") # De corr
 
 image_name = tf.placeholder(tf.string, name='image_name')
 image_class = tf.placeholder(tf.string, name='image_class')
-
-# image_name_batch = tf.placeholder(dtype=tf.string, shape=[None, ], name='image_name_batch')
-# image_class_batch = tf.placeholder(dtype=tf.int8, shape=[None, ], name='image_class_batch')
-
-# evaluation_labels = tf.placeholder(tf.float)
 
 
 def labelFileInit(filename_queue, what_set):
@@ -133,9 +126,6 @@ def max_pool_2x2(x):
 
 
 # Convolutions
-
-# x_image =tf.reshape(x, [-1,48,48,1])
-
 image = tf.reshape(x, [-1, 48, 48, 3])
 
 # Dropout Layer 1:
