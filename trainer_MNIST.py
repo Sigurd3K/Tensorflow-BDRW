@@ -88,6 +88,8 @@ with sess.as_default():
 			print(str(x) + ": " + str(meanAccuracy[-1:])) # The mean accuracy (Accuracy on the whole batch)
 		if x % 1000 == 0:
 			print('%s%s ======= %s done ======= %s' % (fg('white'), bg('red'), str("{0:.0f}%".format((x/loopAmount) * 100)), attr('reset')))
+
+	# Opslaan van het model in ons neurale netwerk
 	input("Press Enter to continue...")
 	saver = tf.train.Saver()
 	save_path = saver.save(sess, "tmp/model.ckpt")
