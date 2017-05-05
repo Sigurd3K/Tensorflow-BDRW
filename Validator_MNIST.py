@@ -46,14 +46,12 @@ labels = tf.placeholder(tf.float32, shape=[None, 10], name="CorrectClass")
 from keras.objectives import categorical_crossentropy
 
 loss = tf.reduce_mean(categorical_crossentropy(labels, model.output))
+# In plats van een Keras optimizer kunnen we bijvoorbeeld gewoon een Tensorflow optimizer op de Keras layers gebruiken
 train_step = tf.train.AdamOptimizer(0.0001).minimize(loss)
 
 """Calculate Accuracy"""
 accuracy_value = accuracy2(labels, preds)
 accuracy_value = tf.reduce_mean(tf.cast(accuracy_value, tf.float32))
-
-
-saver = tf.train.Saver()
 
 """Start of Tensorflow Session"""
 
@@ -86,7 +84,6 @@ with sess.as_default():
 		accuracyArray.append(accuracy)
 	meanAccuracy.append(np.mean(accuracyArray))
 	print(str("Accuracy :") + str(meanAccuracy[-1:])) # The mean accuracy (Accuracy on the whole batch)
-	# print('%s%s ======= %s done ======= %s' % (fg('white'), bg('red'), attr('reset')))
 	input("Press Enter to continue...")
 
 	coord.request_stop()
