@@ -26,7 +26,6 @@ with tf.Session() as sess:
 	keepProb1 = 0.8
 	keepProb2 = 0.8
 
-	# Correcte code
 	accuracyArray = [0, 0, 0]
 	for x in range(loopAmount):
 		training_set_name, training_set_class, training_set_image, filename = sess.run([fR.training_set_name, fR.training_set_class, fR.training_set_image, fR.filenames])  # EERSTE VARS NIET HETZELFDE NOEMEN ALS DIE IN RUN
